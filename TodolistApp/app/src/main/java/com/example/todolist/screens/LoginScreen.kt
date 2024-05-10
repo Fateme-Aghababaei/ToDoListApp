@@ -1,22 +1,25 @@
 package com.example.todolist.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Divider
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -52,68 +54,76 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Column(
-            Modifier.fillMaxSize().padding(top = 128.dp),
-            verticalArrangement = Arrangement.Top,
+        LazyColumn(
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Image(
-                    painter = painterResource(id = R.drawable.hive1),
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(200.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+            item {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Image(
+                        painter = painterResource(id = if(isSystemInDarkTheme()) R.drawable.hive2 else R.drawable.hive1),
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(170.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
 
-                // Spacer(modifier = Modifier.padding(16.dp))
+                    // Spacer(modifier = Modifier.padding(16.dp))
 
-                Text(
-                    text = "ورود به حساب کاربری",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+                    Text(
+                        text = "ورود به حساب کاربری",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
 
-                // Spacer(modifier = Modifier.padding(16.dp))
+                    // Spacer(modifier = Modifier.padding(16.dp))
+                }
             }
 
-            Column (modifier = Modifier.padding(16.dp)) {
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("نام کاربری") },
-                    singleLine = true,
-                    modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
-                    textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr)
-                )
+            item {
+                Column (modifier = Modifier.padding(16.dp)) {
+                    OutlinedTextField(
+                        value = username,
+                        onValueChange = { username = it },
+                        label = { Text("نام کاربری") },
+                        singleLine = true,
+                        modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
+                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr)
+                    )
 
 
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("رمز عبور") },
-                    singleLine = true,
-                    modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
-                    textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    trailingIcon = {
-                        val image = if (passwordVisible)
-                            Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("رمز عبور") },
+                        singleLine = true,
+                        modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
+                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        trailingIcon = {
+                            val image = if (passwordVisible)
+                                Icons.Filled.Visibility
+                            else Icons.Filled.VisibilityOff
 
-                        // Please provide localized description for accessibility services
-                        val description = if (passwordVisible) "Hide password" else "Show password"
+                            // Please provide localized description for accessibility services
+                            val description = if (passwordVisible) "Hide password" else "Show password"
 
-                        IconButton(onClick = {passwordVisible = !passwordVisible}){
-                            Icon(imageVector  = image, description)
+                            IconButton(onClick = {passwordVisible = !passwordVisible}){
+                                Icon(imageVector  = image, description)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
 
-            Column(modifier = Modifier.fillMaxWidth()) {
+            item {
+                Column(modifier = Modifier.fillMaxWidth()) {
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,6 +141,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     )
                 }
             }
+            }
+
+
         }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -18,13 +19,19 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = Orange80,
     secondary = Green80,
-    tertiary = Yellow80
+    tertiary = Yellow80,
+    background = Color(0xFF1E1E1E),
+    onPrimary = Color.Black,
+    onBackground = Color(0xFFE0E0E0)
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Orange40,
     secondary = Green40,
-    tertiary = Yellow40
+    tertiary = Yellow40,
+    background = Color(0xFFFFFBFE),
+    onPrimary = Color.White,
+    onBackground = Color(0xFF1C1B1F)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -61,6 +68,8 @@ fun ToDoListTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
+
+
 
     MaterialTheme(
         colorScheme = colorScheme,
