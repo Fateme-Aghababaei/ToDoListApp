@@ -64,7 +64,7 @@ fun ToDoListTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = IranYekanTypography,
         content = content
     )
 }

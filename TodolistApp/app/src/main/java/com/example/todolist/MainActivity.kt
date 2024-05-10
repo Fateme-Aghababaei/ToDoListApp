@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.todolist.screens.LoginScreen
 import com.example.todolist.ui.theme.ToDoListTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,27 +22,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoListTheme {
-                Greeting()
+                LoginScreen()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(modifier: Modifier = Modifier) {
-    Column (
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(text = "ToDo List")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ToDoListTheme {
-        Greeting()
     }
 }
