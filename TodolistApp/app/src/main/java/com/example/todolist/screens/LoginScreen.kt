@@ -72,16 +72,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             .align(Alignment.CenterHorizontally)
                     )
 
-                    // Spacer(modifier = Modifier.padding(16.dp))
-
                     Text(
                         text = "ورود به حساب کاربری",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         color = MaterialTheme.colorScheme.onBackground
                     )
-
-                    // Spacer(modifier = Modifier.padding(16.dp))
                 }
             }
 

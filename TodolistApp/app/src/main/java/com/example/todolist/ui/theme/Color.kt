@@ -2,10 +2,10 @@ package com.example.todolist.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Orange80 = Color(0xFFF8AE79)
+val OrangePrimaryDark = Color(0xFFE96E45)
 val Green80 = Color(0xFF2E8B57)
-val Yellow80 = Color(0xFFDAA520 )
+val GrayTertiaryDark = Color(0xFF1F1E1C)
 
-val Orange40 = Color(0xFFF47935)
-val Green40 = Color(0xFF3FA657)
-val Yellow40 = Color(0xFFFACD09)
+val OrangePrimaryLight = Color(0xFFFF5F2B)
+val OrangeSecondaryLight = Color(0xFFFFF5F3)
+val GrayTertiaryLight = Color(0xFFF4F4F4)
