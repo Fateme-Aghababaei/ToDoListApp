@@ -79,4 +79,8 @@ dependencies {
 
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
 
+    // MVVM
+    val lifecycle_version = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
 }

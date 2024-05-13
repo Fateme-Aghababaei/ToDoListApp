@@ -11,13 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,14 +46,18 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.util.PatternsCompat
 import com.example.todolist.R
 import com.example.todolist.ui.theme.ToDoListTheme
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var isEmailRequiredError by remember { mutableStateOf(false) }
+
     var password by remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var isPasswordRequiredError by remember {  mutableStateOf(false) }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         LazyColumn(
@@ -84,24 +90,58 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             item {
                 Column (modifier = Modifier.padding(16.dp)) {
                     OutlinedTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        label = { Text("نام کاربری") },
+                        value = email,
+                        onValueChange = {
+                            email = it
+                            isEmailRequiredError = false // Reset the required error when the user starts typing again
+                        },
+                        label = { Text("پست الکترونیک") },
                         singleLine = true,
-                        modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
-                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr)
+                        modifier = Modifier
+                            .padding(16.dp, 8.dp)
+                            .fillMaxWidth(),
+                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Outlined.Mail, contentDescription = "Mail")
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        supportingText = {
+                            if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() && email != "") {
+                                Text(text = "پست الکترونیک نادرست است.")
+                            }
+                            else if (isEmailRequiredError) {
+                                Text(text = "پست الکترونیک اجباری است.")
+                            }
+                        },
+                        isError = (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() && email != "") || isEmailRequiredError,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                if (email.isEmpty()) {
+                                    isEmailRequiredError = true
+                                }
+                            }
+                        )
                     )
 
 
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { password = it },
+                        onValueChange = {
+                            password = it
+                            isPasswordRequiredError = false // Reset the required error when the user starts typing again
+                        },
                         label = { Text("رمز عبور") },
                         singleLine = true,
-                        modifier = Modifier.padding(16.dp, 8.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp, 8.dp)
+                            .fillMaxWidth(),
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Outlined.Lock, contentDescription = "Password")
+                        },
                         trailingIcon = {
                             val image = if (passwordVisible)
                                 Icons.Filled.Visibility
@@ -113,7 +153,20 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             IconButton(onClick = {passwordVisible = !passwordVisible}){
                                 Icon(imageVector  = image, description)
                             }
-                        }
+                        },
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                if (password.isEmpty()) {
+                                    isPasswordRequiredError = true
+                                }
+                            }
+                        ),
+                        supportingText = {
+                            if (isPasswordRequiredError) {
+                                Text(text = "رمز عبور اجباری است.")
+                            }
+                        },
+                        isError = isPasswordRequiredError,
                     )
                 }
             }
