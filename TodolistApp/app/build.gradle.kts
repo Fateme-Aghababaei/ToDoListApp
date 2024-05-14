@@ -83,4 +83,6 @@ dependencies {
     val lifecycle_version = "2.7.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
 
+    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0")
+
 }

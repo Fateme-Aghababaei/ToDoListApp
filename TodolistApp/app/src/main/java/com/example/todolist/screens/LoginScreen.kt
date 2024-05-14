@@ -1,5 +1,6 @@
 package com.example.todolist.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Lock
@@ -29,6 +29,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,25 +44,40 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.util.PatternsCompat
 import com.example.todolist.R
-import com.example.todolist.ui.theme.ToDoListTheme
+import com.example.todolist.viewModel.UserViewModel
+
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: UserViewModel,
+    onLoginClicked: (String) -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
 
     var password by remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var isPasswordRequiredError by remember {  mutableStateOf(false) }
+    var isPasswordRequiredError by remember { mutableStateOf(false) }
+    var flag by remember { mutableStateOf(false) }
+
+    val token = viewModel.token
+    LaunchedEffect(key1 = token) {
+        token.collect {
+            if (it != "") {
+                onLoginClicked(it)
+            }
+        }
+    }
+
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         LazyColumn(
-            Modifier
+            modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.Center,
@@ -70,7 +86,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Image(
-                        painter = painterResource(id = if(isSystemInDarkTheme()) R.drawable.hive2 else R.drawable.hive1),
+                        painter = painterResource(id = if (isSystemInDarkTheme()) R.drawable.hive2 else R.drawable.hive1),
                         contentDescription = "Logo",
                         modifier = Modifier
                             .padding(16.dp)
@@ -88,12 +104,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             }
 
             item {
-                Column (modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     OutlinedTextField(
                         value = email,
                         onValueChange = {
                             email = it
-                            isEmailRequiredError = false // Reset the required error when the user starts typing again
+                            isEmailRequiredError =
+                                false // Reset the required error when the user starts typing again
                         },
                         label = { Text("پست الکترونیک") },
                         singleLine = true,
@@ -106,14 +123,16 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         },
                         shape = RoundedCornerShape(12.dp),
                         supportingText = {
-                            if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() && email != "") {
+                            if (!PatternsCompat.EMAIL_ADDRESS.matcher(email)
+                                    .matches() && email != ""
+                            ) {
                                 Text(text = "پست الکترونیک نادرست است.")
-                            }
-                            else if (isEmailRequiredError) {
+                            } else if (isEmailRequiredError) {
                                 Text(text = "پست الکترونیک اجباری است.")
                             }
                         },
-                        isError = (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() && email != "") || isEmailRequiredError,
+                        isError = (!PatternsCompat.EMAIL_ADDRESS.matcher(email)
+                            .matches() && email != "") || isEmailRequiredError,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         keyboardActions = KeyboardActions(
                             onDone = {
@@ -129,7 +148,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         value = password,
                         onValueChange = {
                             password = it
-                            isPasswordRequiredError = false // Reset the required error when the user starts typing again
+                            isPasswordRequiredError =
+                                false // Reset the required error when the user starts typing again
                         },
                         label = { Text("رمز عبور") },
                         singleLine = true,
@@ -148,10 +168,11 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             else Icons.Filled.VisibilityOff
 
                             // Please provide localized description for accessibility services
-                            val description = if (passwordVisible) "Hide password" else "Show password"
+                            val description =
+                                if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = {passwordVisible = !passwordVisible}){
-                                Icon(imageVector  = image, description)
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(imageVector = image, description)
                             }
                         },
                         keyboardActions = KeyboardActions(
@@ -173,34 +194,29 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp, 8.dp)
-                        .height(48.dp),
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text(
-                        text = "ورود",
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp, 8.dp)
+                            .height(48.dp),
+                        onClick = {
+                            Log.v("mitra", "dlsefjlkd")
+                            viewModel.login("fat@gmail.com", "1234")
+                            flag = true
+                            //onLoginClicked(token)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "ورود",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
                 }
             }
-            }
-
-
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ToDoListTheme {
-        LoginScreen()
     }
 }
