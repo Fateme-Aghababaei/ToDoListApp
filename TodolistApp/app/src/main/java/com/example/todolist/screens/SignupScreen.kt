@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +58,7 @@ import com.example.todolist.viewModel.UserViewModel
 fun SignupScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel,
-    onSignupClicked: () -> Unit,
+    onSignupClicked: (String) -> Unit,
     onNavToLoginClicked: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -73,6 +74,15 @@ fun SignupScreen(
 
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
+
+    val token = viewModel.token
+    LaunchedEffect(key1 = token) {
+        token.collect {
+            if (it != "") {
+                onSignupClicked(it)
+            }
+        }
+    }
 
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -246,7 +256,7 @@ fun SignupScreen(
                             .height(48.dp),
                         onClick = {
                             if (email != "" || password != "" || passwordRepeat != "") {
-                                // TODO - Add signup logic here
+                                viewModel.signup(email, password)
                             } else {
                                 snackBarVisible = true
                                 snackBarMessage = "پر کردن همه موارد الزامی است."

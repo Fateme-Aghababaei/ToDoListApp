@@ -16,4 +16,11 @@ interface APIInterface {
         @Field("email") email: String,
         @Field("password") password: String,
     ): Response<Map<String, String>>
+
+    @FormUrlEncoded
+    @POST("users/signup/")
+    suspend fun signup(
+        @Field("email") email: String,
+        @Field("password") password: String,
+    ): Response<Map<String, String>>
 }
