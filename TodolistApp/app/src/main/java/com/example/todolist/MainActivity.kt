@@ -15,6 +15,7 @@ import com.example.todolist.screens.HomeScreen
 import com.example.todolist.screens.LoginScreen
 import com.example.todolist.screens.SignupScreen
 import com.example.todolist.ui.theme.ToDoListTheme
+import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
 
 class MainActivity : ComponentActivity() {
@@ -35,8 +36,9 @@ class MainActivity : ComponentActivity() {
             ToDoListTheme {
                 val navController = rememberNavController()
                 val userViewModel = viewModel<UserViewModel>()
+                val taskViewModel = viewModel<TaskViewModel>()
                 // TODO - delete line after adding the logic to handle logout
-                 sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
+                sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
 
                 NavHost(navController, startDestination = determineStartDestination()) {
                     // login
@@ -44,8 +46,13 @@ class MainActivity : ComponentActivity() {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
                             navController.navigate(Screens.ScreenHome.route)
+                            Log.v("fatt", "1111")
+                            taskViewModel.getAllTasks(loggedInToken)
+                            Log.v("fatt", "2222")
+                            Log.v("fatt", "Done ${taskViewModel.allTasks.value.toString()}")
                         }, {
                             // Handle signup navigation here
+
                             navController.navigate(Screens.ScreenSignup.route)
                         })
                     }

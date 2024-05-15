@@ -9,7 +9,6 @@ data class Task(
     val dueDate: Date,
     val isCompleted: Boolean,
     val priority: Int,
-    val userId: Int,
     val tags: List<Tag>
 )
 
