@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.util.PatternsCompat
+import androidx.navigation.NavController
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 
@@ -55,7 +56,8 @@ import com.example.todolist.viewModel.UserViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel,
-    onLoginClicked: (String) -> Unit
+    onLoginClicked: (String) -> Unit,
+    //navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
