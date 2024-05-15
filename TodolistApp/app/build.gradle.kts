@@ -86,7 +86,4 @@ dependencies {
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0")
 
-    // dataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-
 }

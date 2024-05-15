@@ -8,6 +8,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun SignupScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun SignupScreen(modifier: Modifier = Modifier) {
     Text(text = "Signup", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 }

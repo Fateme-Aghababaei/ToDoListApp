@@ -202,10 +202,7 @@ fun LoginScreen(
                             .padding(32.dp, 8.dp)
                             .height(48.dp),
                         onClick = {
-                            Log.v("mitra", "dlsefjlkd")
-                            viewModel.login("fat@gmail.com", "1234")
-                            flag = true
-                            //onLoginClicked(token)
+                            viewModel.login(email, password)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
