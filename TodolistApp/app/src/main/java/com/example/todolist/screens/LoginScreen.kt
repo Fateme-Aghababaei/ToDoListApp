@@ -1,6 +1,5 @@
 package com.example.todolist.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -26,7 +25,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +48,6 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.util.PatternsCompat
-import androidx.navigation.NavController
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 
@@ -57,7 +57,6 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel,
     onLoginClicked: (String) -> Unit,
-    //navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
@@ -65,7 +64,10 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var isPasswordRequiredError by remember { mutableStateOf(false) }
-    var flag by remember { mutableStateOf(false) }
+
+    // Snack bar state
+    var snackBarVisible by remember { mutableStateOf(false) }
+    var snackBarMessage by remember { mutableStateOf("") }
 
     val token = viewModel.token
     LaunchedEffect(key1 = token) {
@@ -202,7 +204,13 @@ fun LoginScreen(
                             .padding(32.dp, 8.dp)
                             .height(48.dp),
                         onClick = {
-                            viewModel.login(email, password)
+                            if (email != "" || password != "") {
+                                viewModel.login(email, password)
+                            } else {
+                                snackBarVisible = true
+                                snackBarMessage = "هر دو فیلد الزامی است."
+                            }
+
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
@@ -215,6 +223,20 @@ fun LoginScreen(
                         )
                     }
                 }
+
+            }
+        }
+        // Show snack bar
+        if (snackBarVisible) {
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+                action = {
+                    TextButton(onClick = { snackBarVisible = false }) {
+                        Text(text = "بستن")
+                    }
+                }
+            ) {
+                Text(text = snackBarMessage)
             }
         }
     }

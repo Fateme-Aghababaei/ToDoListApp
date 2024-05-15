@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
     // Shared preferences
     private val SHARED_PREFS_TOKEN = "token"
-    val sharedPref by lazy {
+    private val sharedPref by lazy {
         getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}_sharedPreferences",
             Context.MODE_PRIVATE
@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screens.ScreenLogin.route) {
                         LoginScreen(Modifier, userViewModel) { loggedInToken ->
                             // Handle login logic here
+
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
                             // Navigate to home screen after successful login
                             navController.navigate(Screens.ScreenHome.route)
