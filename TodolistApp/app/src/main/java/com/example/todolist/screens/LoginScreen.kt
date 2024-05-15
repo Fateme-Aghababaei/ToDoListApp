@@ -57,6 +57,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel,
     onLoginClicked: (String) -> Unit,
+    onNavToSignupClicked: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
@@ -132,7 +133,7 @@ fun LoginScreen(
                             ) {
                                 Text(text = "پست الکترونیک نادرست است.")
                             } else if (isEmailRequiredError) {
-                                Text(text = "پست الکترونیک اجباری است.")
+                                Text(text = "پست الکترونیک الزامی است.")
                             }
                         },
                         isError = (!PatternsCompat.EMAIL_ADDRESS.matcher(email)
@@ -161,6 +162,7 @@ fun LoginScreen(
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth(),
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        shape = RoundedCornerShape(12.dp),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         leadingIcon = {
@@ -188,7 +190,7 @@ fun LoginScreen(
                         ),
                         supportingText = {
                             if (isPasswordRequiredError) {
-                                Text(text = "رمز عبور اجباری است.")
+                                Text(text = "رمز عبور الزامی است.")
                             }
                         },
                         isError = isPasswordRequiredError,
@@ -208,7 +210,7 @@ fun LoginScreen(
                                 viewModel.login(email, password)
                             } else {
                                 snackBarVisible = true
-                                snackBarMessage = "هر دو فیلد الزامی است."
+                                snackBarMessage = "پر کردن همه موارد الزامی است."
                             }
 
                         },
@@ -222,6 +224,16 @@ fun LoginScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
+                }
+
+                // button to navigate to the signup screen
+                TextButton(onClick = {
+                    onNavToSignupClicked()
+                }) {
+                    Text(text = "حساب کاربری ندارید؟ ثبت‌نام",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
 
             }

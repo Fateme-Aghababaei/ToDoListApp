@@ -138,15 +138,4 @@ val IranYekanTypography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.sp
     ),
-
-    // display
-//    displaySmall = TextStyle(
-//        fontFamily = YekanBakh,
-//        fontWeight = FontWeight.Normal,
-//        fontSize = 11.sp,
-//        lineHeight = 16.sp,
-//        letterSpacing = 0.sp
-//    ),
-//    displayMedium = TextStyle(),
-//    displayLarge = TextStyle(),
 )

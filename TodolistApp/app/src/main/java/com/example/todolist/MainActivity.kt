@@ -35,23 +35,33 @@ class MainActivity : ComponentActivity() {
             ToDoListTheme {
                 val navController = rememberNavController()
                 val userViewModel = viewModel<UserViewModel>()
+                // TODO - delete line after adding the logic to handle logout
                 sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
 
                 NavHost(navController, startDestination = determineStartDestination()) {
                     // login
                     composable(route = Screens.ScreenLogin.route) {
-                        LoginScreen(Modifier, userViewModel) { loggedInToken ->
+                        LoginScreen(Modifier, userViewModel, { loggedInToken ->
                             // Handle login logic here
-
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
                             // Navigate to home screen after successful login
                             navController.navigate(Screens.ScreenHome.route)
-                        }
+                        }, {
+                            // Handle signup navigation here
+                            navController.navigate(Screens.ScreenSignup.route)
+                        })
                     }
 
                     // signup
                     composable(route = Screens.ScreenSignup.route) {
-                        SignupScreen()
+                        SignupScreen(Modifier, userViewModel, {
+                            // Handle signup logic here
+                            // Navigate to login screen after successful signup
+                            navController.navigate(Screens.ScreenLogin.route)
+                        }, {
+                            // Handle login navigation here 
+                            navController.navigate(Screens.ScreenLogin.route)
+                        })
                     }
 
                     // home
