@@ -24,7 +24,7 @@ class UserViewModel : ViewModel() {
 
     fun signup(email: String, password: String) {
         viewModelScope.launch {
-            val pair = repository.login(email, password)
+            val pair = repository.signup(email, password)
             _token.value = pair.first
             _username.value = pair.second
         }

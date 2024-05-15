@@ -36,15 +36,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val userViewModel = viewModel<UserViewModel>()
                 // TODO - delete line after adding the logic to handle logout
-                // sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
+                 sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
 
                 NavHost(navController, startDestination = determineStartDestination()) {
                     // login
                     composable(route = Screens.ScreenLogin.route) {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
-                            // Handle login logic here
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
-                            // Navigate to home screen after successful login
                             navController.navigate(Screens.ScreenHome.route)
                         }, {
                             // Handle signup navigation here

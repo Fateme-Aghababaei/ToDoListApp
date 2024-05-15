@@ -23,7 +23,7 @@ class UserRepositoryImpl : UserRepository {
             val pair = Pair(res?.get("token") ?: "", res?.get("username") ?: "")
             return pair
         } else {
-            throw Exception(response.errorBody().toString())
+            throw Exception(response.code().toString())
         }
     }
 }

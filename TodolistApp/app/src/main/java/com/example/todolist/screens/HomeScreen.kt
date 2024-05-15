@@ -9,8 +9,5 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    Text(text = "home", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-    Button(onClick = { /*TODO*/ }) {
-        
-    }
+    
 }
