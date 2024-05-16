@@ -2,7 +2,6 @@ package com.example.todolist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.Modifier
@@ -28,7 +27,7 @@ class MainActivity : ComponentActivity() {
             Context.MODE_PRIVATE
         )
     }
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
