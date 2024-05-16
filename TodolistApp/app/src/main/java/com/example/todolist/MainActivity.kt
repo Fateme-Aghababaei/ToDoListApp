@@ -46,10 +46,7 @@ class MainActivity : ComponentActivity() {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
                             navController.navigate(Screens.ScreenHome.route)
-                            Log.v("fatt", "1111")
                             taskViewModel.getAllTasks(loggedInToken)
-                            Log.v("fatt", "2222")
-                            Log.v("fatt", "Done ${taskViewModel.allTasks.value.toString()}")
                         }, {
                             // Handle signup navigation here
 
@@ -70,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
                     // home
                     composable(route = Screens.ScreenHome.route) {
-                        HomeScreen()
+                        HomeScreen(Modifier, taskViewModel)
                     }
 
                     // TODO - Define other destinations here

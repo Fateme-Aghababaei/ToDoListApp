@@ -1,14 +1,13 @@
 package com.example.todolist.models
 
-import java.util.Date
-
 data class Task(
     val id: Int,
     val title: String,
     val description: String,
-    val dueDate: Date,
-    val isCompleted: Boolean,
+    val due_date: String,
+    var is_completed: Boolean,
     val priority: Int,
-    val tags: List<Tag>
+    val tags: List<Tag>,
+    val user: Int
 )
 
