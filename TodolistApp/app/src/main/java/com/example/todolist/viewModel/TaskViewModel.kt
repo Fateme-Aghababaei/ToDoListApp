@@ -1,5 +1,6 @@
 package com.example.todolist.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.models.Task
@@ -19,7 +20,10 @@ class TaskViewModel : ViewModel() {
     fun getAllTasks(token: String) {
         viewModelScope.launch {
             val tasksList = repository.getAllTasks(token)
-            _allTasks.value = tasksList
+            _allTasks.value = tasksList.sortedWith(
+                compareBy<Task> { it.is_completed }
+                    .thenBy { it.due_date }
+            )
         }
     }
 

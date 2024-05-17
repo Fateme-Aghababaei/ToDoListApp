@@ -1,7 +1,6 @@
 package com.example.todolist.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,15 +43,11 @@ import com.example.todolist.viewModel.TaskViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, token: String) {
-    val allTasks = remember {
-        taskViewModel.allTasks
-    }
+
+    val allTasks by taskViewModel.allTasks.collectAsState()
+
     LaunchedEffect(key1 = allTasks) {
-        allTasks.collect {
-            if (it.isNotEmpty()) {
-                Log.v("fatt", allTasks.value.toString())
-            }
-        }
+        taskViewModel.getAllTasks(token)
     }
 
 //    val changeStatusState = taskViewModel.changeTaskStatusFailure
@@ -84,11 +80,11 @@ fun HomeScreen(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, toke
             }
         ) {
             LazyColumn(
-                modifier = Modifier
+                modifier = modifier
                     .padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                items(items = allTasks.value) { task ->
+                items(items = allTasks) { task ->
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token)
                 }
             }
