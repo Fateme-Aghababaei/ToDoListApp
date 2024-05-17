@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 val userViewModel = viewModel<UserViewModel>()
                 val taskViewModel = viewModel<TaskViewModel>()
                 // TODO - delete line after adding the logic to handle logout
-                //sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
+                // sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
 
                 NavHost(navController, startDestination = determineStartDestination()) {
                     // login
@@ -68,14 +68,24 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screens.ScreenHome.route) {
 
                         HomeScreen(
-                            Modifier, taskViewModel,
-                            sharedPref.getString(SHARED_PREFS_TOKEN, "").toString()
+                            modifier = Modifier, taskViewModel = taskViewModel,
+                            token = sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),
+                            onProfileClicked = {
+                                navController.navigate(Screens.ScreenProfile.route)
+                            },
+                            onAddTaskClicked = {
+                                navController.navigate(Screens.ScreenAddTask.route)
+                            }
                         )
                     }
 
                     // add task
                     composable(route = Screens.ScreenAddTask.route) {
-                        AddTaskScreen()
+                        AddTaskScreen(modifier = Modifier, onCancelClicked = {
+                            navController.navigate(Screens.ScreenHome.route)
+                        }, onAddTaskClicked = {
+                            navController.navigate(Screens.ScreenHome.route)
+                        })
                     }
 
                     // profile

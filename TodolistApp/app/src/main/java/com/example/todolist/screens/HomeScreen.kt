@@ -11,11 +11,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,7 +45,13 @@ import com.example.todolist.viewModel.TaskViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, token: String) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    taskViewModel: TaskViewModel,
+    token: String,
+    onProfileClicked: () -> Unit,
+    onAddTaskClicked: () -> Unit
+) {
 
     val allTasks by taskViewModel.allTasks.collectAsState()
 
@@ -62,17 +71,30 @@ fun HomeScreen(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, toke
             topBar = {
                 TopAppBar(
                     title = {
-                        Text("Top app bar")
+                        Text(text = "کارات", style = MaterialTheme.typography.titleLarge)
                     },
                     colors = topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.onBackground,
+                        containerColor = MaterialTheme.colorScheme.tertiary,
                         titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
+                    actions = {
+                        IconButton(onClick = {
+                            onProfileClicked()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "profile",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    },
                 )
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = { /* TODO */ },
+                    onClick = {
+                        onAddTaskClicked()
+                              },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
