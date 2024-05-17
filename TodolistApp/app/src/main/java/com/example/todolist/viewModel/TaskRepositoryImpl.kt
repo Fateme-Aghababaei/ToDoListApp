@@ -1,8 +1,6 @@
 package com.example.todolist.viewModel
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.example.todolist.models.Task
 import com.example.todolist.utils.RetrofitInstance
 
@@ -19,6 +17,9 @@ class TaskRepositoryImpl : TaskRepository {
     }
 
     override suspend fun changeTaskStatus(token: String, id: Int, is_completed: Boolean): Boolean {
+        Log.v("fatt", "token: $token")
+        Log.v("fatt", "id: $id")
+        Log.v("fatt", "is_completed: $is_completed")
         val response = RetrofitInstance.api.changeTaskStatus("Token $token", id, is_completed)
         Log.v("fatt", "success: ${response.isSuccessful}")
         Log.v("fatt", "res: ${response.body()}")

@@ -132,10 +132,9 @@ fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: 
             checked = isChecked,
             onCheckedChange = {
                 isChecked = it
+                task.is_completed = it
                 taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
             }
         )
-
-
     }
 }
