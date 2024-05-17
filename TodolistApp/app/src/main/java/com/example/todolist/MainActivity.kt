@@ -10,8 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.todolist.navigation.Screens
+import com.example.todolist.screens.AddTaskScreen
 import com.example.todolist.screens.HomeScreen
 import com.example.todolist.screens.LoginScreen
+import com.example.todolist.screens.ProfileScreen
 import com.example.todolist.screens.SignupScreen
 import com.example.todolist.ui.theme.ToDoListTheme
 import com.example.todolist.viewModel.TaskViewModel
@@ -71,7 +73,15 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    // TODO - Define other destinations here
+                    // add task
+                    composable(route = Screens.ScreenAddTask.route) {
+                        AddTaskScreen()
+                    }
+
+                    // profile
+                    composable(route = Screens.ScreenProfile.route) {
+                        ProfileScreen()
+                    }
                 }
             }
         }

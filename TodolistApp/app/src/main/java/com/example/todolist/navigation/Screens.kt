@@ -4,6 +4,9 @@ sealed class Screens (val route: String) {
     data object ScreenLogin: Screens("login")
     data object ScreenSignup: Screens("signup")
     data object ScreenHome: Screens("home")
+    data object ScreenAddTask: Screens("addTask")
+    data object ScreenProfile: Screens("profile")
+
 
     data object AuthenticationRoute: Screens("auth")
     data object AppRoute: Screens("app")
