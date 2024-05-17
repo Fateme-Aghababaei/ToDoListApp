@@ -66,7 +66,10 @@ class MainActivity : ComponentActivity() {
 
                     // home
                     composable(route = Screens.ScreenHome.route) {
-                        HomeScreen(Modifier, taskViewModel)
+
+                        HomeScreen(Modifier, taskViewModel,
+                            sharedPref.getString(SHARED_PREFS_TOKEN, "").toString()
+                        )
                     }
 
                     // TODO - Define other destinations here

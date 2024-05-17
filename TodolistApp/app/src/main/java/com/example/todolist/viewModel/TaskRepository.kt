@@ -4,4 +4,6 @@ import com.example.todolist.models.Task
 
 interface TaskRepository {
     suspend fun getAllTasks(token: String): List<Task>
+
+    suspend fun changeTaskStatus(token: String, id: Int, is_completed: Boolean): Boolean
 }

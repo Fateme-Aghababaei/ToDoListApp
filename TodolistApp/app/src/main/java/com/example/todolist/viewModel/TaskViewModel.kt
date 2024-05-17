@@ -1,5 +1,6 @@
 package com.example.todolist.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.models.Task
@@ -12,6 +13,10 @@ class TaskViewModel : ViewModel() {
 
     private val _allTasks = MutableStateFlow(listOf<Task>())
     val allTasks: StateFlow<List<Task>> = _allTasks
+
+    private val _changeTaskStatusFailure = MutableStateFlow(false)
+    val changeTaskStatusFailure: StateFlow<Boolean> = _changeTaskStatusFailure
+
     fun getAllTasks(token: String) {
         viewModelScope.launch {
             val tasksList = repository.getAllTasks(token)
@@ -19,12 +24,11 @@ class TaskViewModel : ViewModel() {
         }
     }
 
-    fun updateTaskState(updatedTask: Task) {
-        val updatedTasks = _allTasks.value.toMutableList()
-        val index = updatedTasks.indexOfFirst { it.id == updatedTask.id }
-        if (index != -1) {
-            updatedTasks[index] = updatedTask
-            _allTasks.value = updatedTasks
+    fun changeTaskStatus(token: String, id: Int, is_completed: Boolean) {
+        viewModelScope.launch {
+            val success = repository.changeTaskStatus(token, id, is_completed)
+            _changeTaskStatusFailure.value = !success
         }
     }
+
 }
