@@ -52,6 +52,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -86,5 +87,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0")
+    // Date
 
+    implementation ("androidx.compose.material3:material3:1.2.0-alpha11")
+    implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation ("androidx.compose.ui:ui:1.0.0")
+    implementation ("androidx.compose.ui:ui-tooling:1.0.0")
 }
