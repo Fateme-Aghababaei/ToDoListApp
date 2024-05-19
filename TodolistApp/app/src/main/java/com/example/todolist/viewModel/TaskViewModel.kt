@@ -14,8 +14,11 @@ class TaskViewModel : ViewModel() {
     private val _allTasks = MutableStateFlow(listOf<Task>())
     val allTasks: StateFlow<List<Task>> = _allTasks
 
-    private val _changeTaskStatusFailure = MutableStateFlow(false)
-    val changeTaskStatusFailure: StateFlow<Boolean> = _changeTaskStatusFailure
+    private val _changeTaskStatus = MutableStateFlow(false)
+    val changeTaskStatus: StateFlow<Boolean> = _changeTaskStatus
+
+    private val _addTaskStatus = MutableStateFlow(false)
+    val addTaskStatus: StateFlow<Boolean> = _addTaskStatus
 
     fun getAllTasks(token: String) {
         viewModelScope.launch {
@@ -30,7 +33,14 @@ class TaskViewModel : ViewModel() {
     fun changeTaskStatus(token: String, id: Int, is_completed: Boolean) {
         viewModelScope.launch {
             val success = repository.changeTaskStatus(token, id, is_completed)
-            _changeTaskStatusFailure.value = !success
+            _changeTaskStatus.value = success
+        }
+    }
+
+    fun addTask(token: String, task: Task) {
+        viewModelScope.launch {
+            val success = repository.addTask(token, task)
+            _changeTaskStatus.value = success
         }
     }
 

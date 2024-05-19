@@ -1,5 +1,7 @@
 package com.example.todolist.screens
 
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,8 +13,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,7 +78,6 @@ fun HomeScreen(
                     },
                     colors = topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
                     actions = {
                         IconButton(onClick = {
@@ -94,7 +96,7 @@ fun HomeScreen(
                 FloatingActionButton(
                     onClick = {
                         onAddTaskClicked()
-                              },
+                    },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
@@ -106,6 +108,80 @@ fun HomeScreen(
                     .padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
+                item {
+                    TaskUI(
+                        modifier = Modifier,
+                        task = Task(
+                            1,
+                            "تست",
+                            "تست توضیح",
+                            "2021-12-13",
+                            false,
+                            1,
+                            listOf(),
+                            1
+                        ),
+                        taskViewModel = taskViewModel,
+                        token = token
+                    )
+                }
+
+                item {
+                    TaskUI(
+                        modifier = Modifier,
+                        task = Task(
+                            1,
+                            "تست",
+                            "تست توضیح",
+                            "2021-12-13",
+                            false,
+                            2,
+                            listOf(),
+                            1
+                        ),
+                        taskViewModel = taskViewModel,
+                        token = token
+                    )
+                }
+
+                item {
+                    TaskUI(
+                        modifier = Modifier,
+                        task = Task(
+                            1,
+                            "تست",
+                            "تست توضیح",
+                            "2021-12-13",
+                            false,
+                            3,
+                            listOf(),
+                            1
+                        ),
+                        taskViewModel = taskViewModel,
+                        token = token
+                    )
+                }
+
+                item {
+                    TaskUI(
+                        modifier = Modifier,
+                        task = Task(
+                            1,
+                            "تست",
+                            "تست توضیح",
+                            "2021-12-13",
+                            false,
+                            0,
+                            listOf(),
+                            1
+                        ),
+                        taskViewModel = taskViewModel,
+                        token = token
+                    )
+                }
+
+
+
                 items(items = allTasks) { task ->
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token)
                 }
@@ -114,23 +190,175 @@ fun HomeScreen(
     }
 }
 
+//@SuppressLint("StateFlowValueCalledInComposition")
+//@Composable
+//fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
+//    var isChecked by remember {
+//        mutableStateOf(task.is_completed)
+//    }
+////    Row(
+////        modifier = modifier
+////            .padding(16.dp, 8.dp)
+////            .fillMaxWidth()
+////            .clip(RoundedCornerShape(8.dp))
+////            .drawBehind {
+////                val strokeWidth = 10 * density
+////                drawLine(
+////                    if(Priority == 1){
+////                        Color.Red
+////                    }else if(Priority == 2){
+////                        Color.Yellow
+////                    }
+////                    ,
+////                    Offset(size.width, strokeWidth),
+////                    Offset(size.width, size.height),
+////                    strokeWidth
+////                )
+////            }
+////            .padding(16.dp, 8.dp),
+////        horizontalArrangement = Arrangement.SpaceBetween,
+////        verticalAlignment = Alignment.CenterVertically
+////    )
+//    Row(
+//        modifier = Modifier
+//            .padding(16.dp, 8.dp)
+//            .fillMaxWidth()
+//            .clip(RoundedCornerShape(8.dp))
+//            .drawBehind {
+//                val strokeWidth = 10 * density
+//                val color = when (task.priority) {
+//                    1 -> Color.Red
+//                    2 -> Color.Yellow
+//                    3 -> Color.Green
+//                    else -> Color.LightGray
+//                }
+//                drawLine(
+//                    color,
+//                    Offset(size.width, strokeWidth / 2),
+//                    Offset(size.width, size.height - strokeWidth / 2),
+//                    strokeWidth
+//                )
+//            }
+//            .padding(16.dp, 8.dp),
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        verticalAlignment = Alignment.CenterVertically
+//    )
+//    {
+//        Column {
+//            Text(text = task.title)
+//            Text(text = task.description)
+//            Text(text = task.due_date)
+//            for (tag in task.tags)
+//                Text(text = tag.title)
+//        }
+//
+//        Checkbox(
+//            checked = isChecked,
+//            onCheckedChange = {
+//                isChecked = it
+//                task.is_completed = it
+//                taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
+//            }
+//        )
+//    }
+//}
+
+//@SuppressLint("StateFlowValueCalledInComposition")
+//@Composable
+//fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
+//    var isChecked by remember {
+//        mutableStateOf(task.is_completed)
+//    }
+//
+//    Row(
+//        modifier = Modifier
+//            .padding(16.dp, 8.dp)
+//            .fillMaxWidth()
+//            .clip(RoundedCornerShape(8.dp))
+//            .drawBehind {
+//                val strokeWidth = 10 * density
+//                val color = when (task.priority) {
+//                    1 -> Color.Red
+//                    2 -> Color.Yellow
+//                    3 -> Color.Green
+//                    else -> Color.LightGray
+//                }
+//                drawLine(
+//                    color,
+//                    Offset(size.width, strokeWidth / 2),
+//                    Offset(size.width, size.height - strokeWidth / 2),
+//                    strokeWidth
+//                )
+//            }
+//            .padding(16.dp, 8.dp),
+//        horizontalArrangement = Arrangement.SpaceBetween,
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Column {
+//            Text(text = task.title)
+//            Text(text = task.description)
+//            Text(text = task.due_date)
+//            for (tag in task.tags)
+//                Text(text = tag.title)
+//        }
+//
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                IconButton(onClick = { /* TODO: Add delete functionality */ }) {
+//                    Icon(
+//                        imageVector = Icons.Default.Delete,
+//                        contentDescription = "Delete",
+//                        tint = Color.DarkGray
+//                    )
+//                }
+//
+//                IconButton(onClick = { /* TODO: Add share functionality */ }) {
+//                    Icon(
+//                        imageVector = Icons.Default.Share,
+//                        contentDescription = "Share",
+//                        tint = Color.Gray
+//                    )
+//                }
+//            }
+//            Checkbox(
+//
+//                checked = isChecked,
+//                onCheckedChange = {
+//                    isChecked = it
+//                    task.is_completed = it
+//                    taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
+//                }
+//            )
+//        }
+//    }
+//}
+
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
     var isChecked by remember {
         mutableStateOf(task.is_completed)
     }
+    val context = LocalContext.current
+
     Row(
-        modifier = modifier
+        modifier = Modifier
             .padding(16.dp, 8.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .drawBehind {
                 val strokeWidth = 10 * density
+                val color = when (task.priority) {
+                    1 -> Color.Red
+                    2 -> Color.Yellow
+                    3 -> Color.Green
+                    else -> Color.LightGray
+                }
                 drawLine(
-                    Color.LightGray,
-                    Offset(size.width, strokeWidth),
-                    Offset(size.width, size.height),
+                    color,
+                    Offset(size.width, strokeWidth / 2),
+                    Offset(size.width, size.height - strokeWidth / 2),
                     strokeWidth
                 )
             }
@@ -146,13 +374,43 @@ fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: 
                 Text(text = tag.title)
         }
 
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = {
-                isChecked = it
-                task.is_completed = it
-                taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                IconButton(onClick = {
+                    // TODO: Add delete functionality
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.DarkGray
+                    )
+                }
+
+                IconButton(onClick = {
+                    val shareText = "عنوان تسک: ${task.title}"
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(intent, null)
+                    context.startActivity(shareIntent)
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = Color.Gray
+                    )
+                }
             }
-        )
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = {
+                    isChecked = it
+                    task.is_completed = it
+                    taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
+                }
+            )
+        }
     }
 }

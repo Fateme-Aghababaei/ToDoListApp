@@ -2,6 +2,7 @@ package com.example.todolist.data
 
 import com.example.todolist.models.Task
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -37,4 +38,11 @@ interface APIInterface {
         @Field("id") id: Int,
         @Field("is_completed") is_completed: Boolean
     ): Response<Map<String, Any>>
+
+
+    @POST("task/add_task/")
+    suspend fun addTask(
+        @Header("Authorization") authToken: String,
+        @Body task: Task
+    ): Response<Map<String, String>>
 }

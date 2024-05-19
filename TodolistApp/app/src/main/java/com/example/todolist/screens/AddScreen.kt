@@ -14,17 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,7 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -43,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextStyle
@@ -51,15 +49,17 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.todolist.models.Tag
+import com.example.todolist.models.Task
 import java.util.Calendar
 
 var items = listOf("برچسب ۱", "برچسب ۲", "برچسب ۳")
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(
+fun AddScreen(
     modifier: Modifier = Modifier,
     onCancelClicked: () -> Unit,
-    onAddTaskClicked: () -> Unit
+    onAddTaskClicked: (task:Task) -> Unit
 ) {
 
     var title by remember { mutableStateOf("") }
@@ -68,9 +68,9 @@ fun AddTaskScreen(
     var dueTime by remember { mutableStateOf("") }
     var priority by remember { mutableIntStateOf(0) }
     var tags by remember { mutableStateOf<List<Tag>>(emptyList()) }
-
+    var selectedPriorityIndex by remember { mutableStateOf(0) }
     val context = LocalContext.current
-
+    var Priority = 0
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
@@ -82,9 +82,9 @@ fun AddTaskScreen(
                             style = MaterialTheme.typography.titleLarge
                         )
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(
+                    colors = topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = Color.Green,
                     ),
                     actions = {
                         IconButton(onClick = {
@@ -102,7 +102,15 @@ fun AddTaskScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        onAddTaskClicked()
+                        val task = Task(1,
+                            "تست",
+                            "تست توضیح",
+                            "2021-12-13",
+                            false,
+                            1,
+                            listOf(),
+                            1)
+                        onAddTaskClicked(task)
                     },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
@@ -204,19 +212,22 @@ fun AddTaskScreen(
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                     )
-
-
                     OutlinedTextField(
                         value = dueDate,
                         onValueChange = { dueDate = it },
                         label = { Text("تاریخ") },
+
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .clickable {
+                                datePickerDialog.show()
+                            },
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         enabled = false,
+
                         trailingIcon = {
                             IconButton(onClick = {
                                 datePickerDialog.show()
@@ -238,14 +249,16 @@ fun AddTaskScreen(
                         calendar.get(Calendar.MINUTE),
                         true
                     )
-
                     OutlinedTextField(
                         value = dueTime,
                         onValueChange = { dueTime = it },
                         label = { Text("زمان") },
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .clickable {
+                                timePickerDialog.show()
+                            },
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -258,10 +271,36 @@ fun AddTaskScreen(
                                     tint = MaterialTheme.colorScheme.primary,contentDescription = "انتخاب زمان")
                             }
                         }
-
                     )
-
                 }
+                val priorityOptions = listOf("مشخص نشده", "کم", "متوسط", "زیاد")
+                // Priority Dropdown
+                item {
+                    // Dropdown to select priority
+                    OutlinedTextField(
+                        value = priorityOptions[selectedPriorityIndex],
+                        onValueChange = { /* No action needed as it's read-only */ },
+                        label = { Text("اولویت") },
+                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        enabled = false,
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                // Toggle dropdown visibility
+                                selectedPriorityIndex = (selectedPriorityIndex + 1) % priorityOptions.size
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    contentDescription = "Open priority dropdown"
+                                )
+                            }
+                        }
+                    )
+                    Priority = selectedPriorityIndex
+                }
+
+
 
 
             }

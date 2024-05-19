@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.todolist.navigation.Screens
-import com.example.todolist.screens.AddTaskScreen
+import com.example.todolist.screens.AddScreen
 import com.example.todolist.screens.HomeScreen
 import com.example.todolist.screens.LoginScreen
 import com.example.todolist.screens.ProfileScreen
@@ -74,16 +74,18 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screens.ScreenProfile.route)
                             },
                             onAddTaskClicked = {
-                                navController.navigate(Screens.ScreenAddTask.route)
+                                navController.navigate(Screens.ScreenAdd.route)
                             }
                         )
                     }
 
                     // add task
-                    composable(route = Screens.ScreenAddTask.route) {
-                        AddTaskScreen(modifier = Modifier, onCancelClicked = {
+                    composable(route = Screens.ScreenAdd.route) {
+                        AddScreen(modifier = Modifier, onCancelClicked = {
                             navController.navigate(Screens.ScreenHome.route)
                         }, onAddTaskClicked = {
+
+                            taskViewModel.addTask(sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),it)
                             navController.navigate(Screens.ScreenHome.route)
                         })
                     }

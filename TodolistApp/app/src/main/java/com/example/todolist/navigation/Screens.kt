@@ -4,7 +4,7 @@ sealed class Screens (val route: String) {
     data object ScreenLogin: Screens("login")
     data object ScreenSignup: Screens("signup")
     data object ScreenHome: Screens("home")
-    data object ScreenAddTask: Screens("addTask")
+    data object ScreenAdd: Screens("add")
     data object ScreenProfile: Screens("profile")
 
 
