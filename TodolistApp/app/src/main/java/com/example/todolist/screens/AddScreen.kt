@@ -2,6 +2,7 @@ package com.example.todolist.screens
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.compose.foundation.background
@@ -102,14 +103,15 @@ fun AddScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        val task = Task(1,
-                            "تست",
-                            "تست توضیح",
-                            "2021-12-13",
+                        Log.v("fatt", "Clicked")
+                        val task = Task(null,
+                            title,
+                            description,
+                            dueDate,
                             false,
-                            1,
+                            priority,
                             listOf(),
-                            1)
+                            null)
                         onAddTaskClicked(task)
                     },
                     containerColor = MaterialTheme.colorScheme.primary
@@ -206,7 +208,7 @@ fun AddScreen(
                     val datePickerDialog = DatePickerDialog(
                         context,
                         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                            dueDate = "$dayOfMonth/${month + 1}/$year"
+                            dueDate = "$year-${month + 1}-$dayOfMonth"
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
@@ -297,7 +299,7 @@ fun AddScreen(
                             }
                         }
                     )
-                    Priority = selectedPriorityIndex
+                    priority = selectedPriorityIndex
                 }
 
 
