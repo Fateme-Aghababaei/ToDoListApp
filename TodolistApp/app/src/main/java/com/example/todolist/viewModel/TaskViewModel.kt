@@ -1,6 +1,5 @@
 package com.example.todolist.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.models.Task
@@ -19,6 +18,9 @@ class TaskViewModel : ViewModel() {
 
     private val _addTaskStatus = MutableStateFlow(false)
     val addTaskStatus: StateFlow<Boolean> = _addTaskStatus
+
+    private val _deleteTaskStatus = MutableStateFlow(false)
+    val deleteTaskStatus: StateFlow<Boolean> = _deleteTaskStatus
 
     fun getAllTasks(token: String) {
         viewModelScope.launch {
@@ -44,4 +46,10 @@ class TaskViewModel : ViewModel() {
         }
     }
 
+    fun deleteTask(token: String, id: Int) {
+        viewModelScope.launch {
+            val success = repository.deleteTask(token, id)
+            _deleteTaskStatus.value = success
+        }
+    }
 }

@@ -8,4 +8,6 @@ interface TaskRepository {
     suspend fun changeTaskStatus(token: String, id: Int, is_completed: Boolean): Boolean
 
     suspend fun addTask(token: String, task: Task): Boolean
+
+    suspend fun deleteTask(token: String, id: Int): Boolean
 }

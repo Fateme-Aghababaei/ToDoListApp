@@ -103,8 +103,7 @@ fun AddScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        Log.v("fatt", "Clicked")
-                        val task = Task(null,
+                        val task = Task(0,
                             title,
                             description,
                             dueDate,

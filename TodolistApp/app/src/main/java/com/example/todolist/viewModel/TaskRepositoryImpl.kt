@@ -25,4 +25,14 @@ class TaskRepositoryImpl : TaskRepository {
         val response = RetrofitInstance.api.addTask("Token $token", task)
         return response.isSuccessful
     }
+
+    override suspend fun deleteTask(token: String, id: Int): Boolean {
+        Log.v("fatt", "token: $token")
+        Log.v("fatt", "id: $id")
+        val response = RetrofitInstance.api.deleteTask("Token $token", id)
+        Log.v("fatt", "delete: ${response.isSuccessful}")
+        Log.v("fatt", "delete: ${response.message()}")
+        Log.v("fatt", "delete: ${response.code()}")
+        return response.isSuccessful
+    }
 }

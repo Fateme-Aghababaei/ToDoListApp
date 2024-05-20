@@ -4,10 +4,14 @@ import com.example.todolist.data.APIInterface
 import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     val api: APIInterface by lazy {
         val httpClient = OkHttpClient.Builder()
+            .connectTimeout(2, TimeUnit.MINUTES)
+            .writeTimeout(2, TimeUnit.MINUTES) // write timeout
+            .readTimeout(2, TimeUnit.MINUTES) // read timeout
             .addInterceptor { chain ->
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()

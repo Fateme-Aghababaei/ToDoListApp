@@ -76,6 +76,9 @@ class MainActivity : ComponentActivity() {
                             },
                             onAddTaskClicked = {
                                 navController.navigate(Screens.ScreenAdd.route)
+                            },
+                            refreshOnClick = {
+                                taskViewModel.getAllTasks(sharedPref.getString(SHARED_PREFS_TOKEN, "").toString())
                             }
                         )
                     }

@@ -3,6 +3,7 @@ package com.example.todolist.screens
 import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,7 +54,8 @@ fun HomeScreen(
     taskViewModel: TaskViewModel,
     token: String,
     onProfileClicked: () -> Unit,
-    onAddTaskClicked: () -> Unit
+    onAddTaskClicked: () -> Unit,
+    refreshOnClick: () -> Unit
 ) {
 
     val allTasks by taskViewModel.allTasks.collectAsState()
@@ -122,7 +124,8 @@ fun HomeScreen(
                             1
                         ),
                         taskViewModel = taskViewModel,
-                        token = token
+                        token = token,
+                        { refreshOnClick() }
                     )
                 }
 
@@ -140,7 +143,8 @@ fun HomeScreen(
                             1
                         ),
                         taskViewModel = taskViewModel,
-                        token = token
+                        token = token,
+                        refreshOnClick = refreshOnClick
                     )
                 }
 
@@ -158,7 +162,8 @@ fun HomeScreen(
                             1
                         ),
                         taskViewModel = taskViewModel,
-                        token = token
+                        token = token,
+                        refreshOnClick = refreshOnClick
                     )
                 }
 
@@ -176,14 +181,15 @@ fun HomeScreen(
                             1
                         ),
                         taskViewModel = taskViewModel,
-                        token = token
+                        token = token,
+                        refreshOnClick = refreshOnClick
                     )
                 }
 
 
 
                 items(items = allTasks) { task ->
-                    TaskUI(modifier = Modifier, task = task, taskViewModel, token)
+                    TaskUI(modifier = Modifier, task = task, taskViewModel, token, refreshOnClick)
                 }
             }
         }
@@ -336,7 +342,13 @@ fun HomeScreen(
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
+fun TaskUI(
+    modifier: Modifier,
+    task: Task,
+    taskViewModel: TaskViewModel,
+    token: String,
+    refreshOnClick: () -> Unit
+) {
     var isChecked by remember {
         mutableStateOf(task.is_completed)
     }
@@ -378,6 +390,12 @@ fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(onClick = {
                     // TODO: Add delete functionality
+                    taskViewModel.deleteTask(token, task.id)
+                    Log.v("fatt", taskViewModel.deleteTaskStatus.value.toString())
+                    if (taskViewModel.deleteTaskStatus.value) {
+                        Log.v("fatt", "HERE")
+                        refreshOnClick()
+                    }
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
