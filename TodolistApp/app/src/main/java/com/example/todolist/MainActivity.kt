@@ -78,19 +78,32 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(Screens.ScreenAdd.route)
                             },
                             refreshOnClick = {
-                                taskViewModel.getAllTasks(sharedPref.getString(SHARED_PREFS_TOKEN, "").toString())
+                                taskViewModel.getAllTasks(
+                                    sharedPref.getString(
+                                        SHARED_PREFS_TOKEN,
+                                        ""
+                                    ).toString()
+                                )
                             }
                         )
                     }
 
                     // add task
                     composable(route = Screens.ScreenAdd.route) {
-                        AddScreen(modifier = Modifier, onCancelClicked = {
-                            navController.navigate(Screens.ScreenHome.route)
-                        }, onAddTaskClicked = {
-                            taskViewModel.addTask(sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),it)
-                            navController.navigate(Screens.ScreenHome.route)
-                        })
+                        AddScreen(modifier = Modifier,
+                            taskViewModel = taskViewModel,
+                            token = sharedPref.getString(
+                                SHARED_PREFS_TOKEN,
+                                ""
+                            ).toString(),
+                            onCancelClicked = {
+                                navController.navigate(Screens.ScreenHome.route)
+                            }, onAddTaskClicked = {
+                                taskViewModel.addTask(
+                                    sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(), it
+                                )
+                                navController.navigate(Screens.ScreenHome.route)
+                            })
                     }
 
                     // profile

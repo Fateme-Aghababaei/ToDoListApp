@@ -1,5 +1,6 @@
 package com.example.todolist.viewModel
 
+import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 
 interface TaskRepository {
@@ -10,4 +11,6 @@ interface TaskRepository {
     suspend fun addTask(token: String, task: Task): Boolean
 
     suspend fun deleteTask(token: String, id: Int): Boolean
+
+    suspend fun getTags(token: String): List<Tag>
 }

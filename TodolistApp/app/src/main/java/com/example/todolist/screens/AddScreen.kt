@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +42,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -56,6 +61,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
+import com.example.todolist.viewModel.TaskViewModel
 import java.util.Calendar
 
 var items = listOf("برچسب ۱", "برچسب ۲", "برچسب ۳")
@@ -64,6 +70,8 @@ var items = listOf("برچسب ۱", "برچسب ۲", "برچسب ۳")
 @Composable
 fun AddScreen(
     modifier: Modifier = Modifier,
+    taskViewModel: TaskViewModel,
+    token: String,
     onCancelClicked: () -> Unit,
     onAddTaskClicked: (task: Task) -> Unit
 ) {
@@ -73,9 +81,16 @@ fun AddScreen(
     var dueDate by remember { mutableStateOf("") }
     var dueTime by remember { mutableStateOf("") }
     var priority by remember { mutableIntStateOf(0) }
-    var tags by remember { mutableStateOf<List<Tag>>(emptyList()) }
-    var selectedPriorityIndex by remember { mutableStateOf(0) }
+    var tags by remember { mutableStateOf(emptyList<Tag>()) }
+    var selectedPriorityIndex by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
+
+    val allTags by taskViewModel.allTags.collectAsState()
+
+    LaunchedEffect(key1 = allTags) {
+        taskViewModel.getTags(token)
+        Log.v("fatt", allTags.toString())
+    }
 
     // Snack bar state
     var snackBarVisible by remember { mutableStateOf(false) }
@@ -154,46 +169,61 @@ fun AddScreen(
                 }
                 //Tag
                 item {
+                    Text("برچسب‌ها", style = MaterialTheme.typography.bodyMedium)
+                    LazyRow(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(allTags) { tag ->
+                            val isSelected = tags.contains(tag)
 
-                    var searchText by remember { mutableStateOf("") }
-                    val searchResults = remember { mutableStateListOf<String>() }
+                            FilterChip(
+                                selected = isSelected,
+                                onClick = {
+                                    Log.v("fatt", "hmmmm")
+                                    tags = if (isSelected) {
+                                        tags - tag
+                                    } else {
+                                        tags + tag
+                                    }
+                                    Log.v("fatt", "update tags: $tags")
+                                },
+                                label = { Text(tag.title) }
+                            )
+                        }
+                    }
 
-                    OutlinedTextField(
-                        value = searchText,
-                        onValueChange = { searchText = it },
-                        label = { Text("برچسب", style = MaterialTheme.typography.bodyMedium) },
-                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
-
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-//                        trailingIcon = {
-//                            IconButton(onClick = {
+//                    var searchText by remember { mutableStateOf("") }
+//                    val searchResults = remember { mutableStateListOf<String>() }
 //
-//                            }) {
-//                                Icon(imageVector = Icons.Default.Circle,
-//                                    tint = MaterialTheme.colorScheme.primary,contentDescription = "انتخاب تاریخ")
+//                    OutlinedTextField(
+//                        value = searchText,
+//                        onValueChange = { searchText = it },
+//                        label = { Text("برچسب", style = MaterialTheme.typography.bodyMedium) },
+//                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
+//
+//                        modifier = Modifier
+//                            .padding(16.dp)
+//                            .fillMaxWidth(),
+//                        shape = RoundedCornerShape(12.dp),
+//                    )
+//                    Column(modifier = Modifier.padding(16.dp)) {
+//                        var expanded by remember { mutableStateOf(false) }
+//                        SearchResultsList(searchResults = searchResults) { result ->
+//                            if (!items.contains(result)) {
+//                                items += result
 //                            }
-//                        },
-                        shape = RoundedCornerShape(12.dp),
-                    )
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        var expanded by remember { mutableStateOf(false) }
-                        SearchResultsList(searchResults = searchResults) { result ->
-                            if (!items.contains(result)) {
-                                items += result
-                            }
-                            searchText = result
-                            expanded = false
-                        }
-                    }
+//                            searchText = result
+//                            expanded = false
+//                        }
+//                    }
 
-                    searchResults.clear()
-                    for (item in items) {
-                        if (item.contains(searchText)) {
-                            searchResults.add(item)
-                        }
-                    }
+//                    searchResults.clear()
+//                    for (item in items) {
+//                        if (item.contains(searchText)) {
+//                            searchResults.add(item)
+//                        }
+//                    }
                 }
 
                 // Date with Calendar Icon
@@ -340,7 +370,6 @@ fun AddScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         onClick = {
                             if (title != "" && description != "" && dueDate != "") {
-                                Log.v("fatt", "Omad inja")
                                 val task = Task(
                                     0,
                                     title,

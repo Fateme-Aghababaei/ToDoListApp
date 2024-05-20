@@ -64,13 +64,6 @@ fun HomeScreen(
         taskViewModel.getAllTasks(token)
     }
 
-//    val changeStatusState = taskViewModel.changeTaskStatusFailure
-//    LaunchedEffect(key1 = changeStatusState) {
-//        if (changeStatusState.value) {
-//
-//        }
-//    }
-
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
             topBar = {
@@ -110,84 +103,6 @@ fun HomeScreen(
                     .padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                item {
-                    TaskUI(
-                        modifier = Modifier,
-                        task = Task(
-                            1,
-                            "تست",
-                            "تست توضیح",
-                            "2021-12-13",
-                            false,
-                            1,
-                            listOf(),
-                            1
-                        ),
-                        taskViewModel = taskViewModel,
-                        token = token,
-                        { refreshOnClick() }
-                    )
-                }
-
-                item {
-                    TaskUI(
-                        modifier = Modifier,
-                        task = Task(
-                            1,
-                            "تست",
-                            "تست توضیح",
-                            "2021-12-13",
-                            false,
-                            2,
-                            listOf(),
-                            1
-                        ),
-                        taskViewModel = taskViewModel,
-                        token = token,
-                        refreshOnClick = refreshOnClick
-                    )
-                }
-
-                item {
-                    TaskUI(
-                        modifier = Modifier,
-                        task = Task(
-                            1,
-                            "تست",
-                            "تست توضیح",
-                            "2021-12-13",
-                            false,
-                            3,
-                            listOf(),
-                            1
-                        ),
-                        taskViewModel = taskViewModel,
-                        token = token,
-                        refreshOnClick = refreshOnClick
-                    )
-                }
-
-                item {
-                    TaskUI(
-                        modifier = Modifier,
-                        task = Task(
-                            1,
-                            "تست",
-                            "تست توضیح",
-                            "2021-12-13",
-                            false,
-                            0,
-                            listOf(),
-                            1
-                        ),
-                        taskViewModel = taskViewModel,
-                        token = token,
-                        refreshOnClick = refreshOnClick
-                    )
-                }
-
-
-
                 items(items = allTasks) { task ->
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token, refreshOnClick)
                 }
@@ -195,149 +110,6 @@ fun HomeScreen(
         }
     }
 }
-
-//@SuppressLint("StateFlowValueCalledInComposition")
-//@Composable
-//fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
-//    var isChecked by remember {
-//        mutableStateOf(task.is_completed)
-//    }
-////    Row(
-////        modifier = modifier
-////            .padding(16.dp, 8.dp)
-////            .fillMaxWidth()
-////            .clip(RoundedCornerShape(8.dp))
-////            .drawBehind {
-////                val strokeWidth = 10 * density
-////                drawLine(
-////                    if(Priority == 1){
-////                        Color.Red
-////                    }else if(Priority == 2){
-////                        Color.Yellow
-////                    }
-////                    ,
-////                    Offset(size.width, strokeWidth),
-////                    Offset(size.width, size.height),
-////                    strokeWidth
-////                )
-////            }
-////            .padding(16.dp, 8.dp),
-////        horizontalArrangement = Arrangement.SpaceBetween,
-////        verticalAlignment = Alignment.CenterVertically
-////    )
-//    Row(
-//        modifier = Modifier
-//            .padding(16.dp, 8.dp)
-//            .fillMaxWidth()
-//            .clip(RoundedCornerShape(8.dp))
-//            .drawBehind {
-//                val strokeWidth = 10 * density
-//                val color = when (task.priority) {
-//                    1 -> Color.Red
-//                    2 -> Color.Yellow
-//                    3 -> Color.Green
-//                    else -> Color.LightGray
-//                }
-//                drawLine(
-//                    color,
-//                    Offset(size.width, strokeWidth / 2),
-//                    Offset(size.width, size.height - strokeWidth / 2),
-//                    strokeWidth
-//                )
-//            }
-//            .padding(16.dp, 8.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween,
-//        verticalAlignment = Alignment.CenterVertically
-//    )
-//    {
-//        Column {
-//            Text(text = task.title)
-//            Text(text = task.description)
-//            Text(text = task.due_date)
-//            for (tag in task.tags)
-//                Text(text = tag.title)
-//        }
-//
-//        Checkbox(
-//            checked = isChecked,
-//            onCheckedChange = {
-//                isChecked = it
-//                task.is_completed = it
-//                taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
-//            }
-//        )
-//    }
-//}
-
-//@SuppressLint("StateFlowValueCalledInComposition")
-//@Composable
-//fun TaskUI(modifier: Modifier, task: Task, taskViewModel: TaskViewModel, token: String) {
-//    var isChecked by remember {
-//        mutableStateOf(task.is_completed)
-//    }
-//
-//    Row(
-//        modifier = Modifier
-//            .padding(16.dp, 8.dp)
-//            .fillMaxWidth()
-//            .clip(RoundedCornerShape(8.dp))
-//            .drawBehind {
-//                val strokeWidth = 10 * density
-//                val color = when (task.priority) {
-//                    1 -> Color.Red
-//                    2 -> Color.Yellow
-//                    3 -> Color.Green
-//                    else -> Color.LightGray
-//                }
-//                drawLine(
-//                    color,
-//                    Offset(size.width, strokeWidth / 2),
-//                    Offset(size.width, size.height - strokeWidth / 2),
-//                    strokeWidth
-//                )
-//            }
-//            .padding(16.dp, 8.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween,
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Column {
-//            Text(text = task.title)
-//            Text(text = task.description)
-//            Text(text = task.due_date)
-//            for (tag in task.tags)
-//                Text(text = tag.title)
-//        }
-//
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-//                IconButton(onClick = { /* TODO: Add delete functionality */ }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Delete,
-//                        contentDescription = "Delete",
-//                        tint = Color.DarkGray
-//                    )
-//                }
-//
-//                IconButton(onClick = { /* TODO: Add share functionality */ }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Share,
-//                        contentDescription = "Share",
-//                        tint = Color.Gray
-//                    )
-//                }
-//            }
-//            Checkbox(
-//
-//                checked = isChecked,
-//                onCheckedChange = {
-//                    isChecked = it
-//                    task.is_completed = it
-//                    taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
-//                }
-//            )
-//        }
-//    }
-//}
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -421,10 +193,7 @@ fun TaskUI(
                 onCheckedChange = {
                     isChecked = it
                     task.is_completed = it
-                    task.id?.let { it1 ->
-                        taskViewModel.changeTaskStatus(token,
-                            it1, task.is_completed)
-                    }
+                    taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
                 }
             )
         }

@@ -1,5 +1,6 @@
 package com.example.todolist.data
 
+import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 import retrofit2.Response
 import retrofit2.http.Body
@@ -55,4 +56,9 @@ interface APIInterface {
         @Header("Authorization") authToken: String,
         @Field("id") id: Int
     ): Response<Map<String, String>>
+
+    @GET("task/get_tags/")
+    suspend fun getTags(
+        @Header("Authorization") authToken: String
+    ): Response<List<Tag>>
 }
