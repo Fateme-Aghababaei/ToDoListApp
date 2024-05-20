@@ -1,5 +1,6 @@
 package com.example.todolist.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.models.Task
@@ -42,6 +43,7 @@ class TaskViewModel : ViewModel() {
     fun addTask(token: String, task: Task) {
         viewModelScope.launch {
             val success = repository.addTask(token, task)
+            Log.v("fatt", "success: $success")
             _changeTaskStatus.value = success
         }
     }

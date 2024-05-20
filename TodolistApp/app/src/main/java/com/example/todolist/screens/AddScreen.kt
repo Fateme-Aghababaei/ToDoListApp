@@ -29,6 +29,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -71,7 +73,10 @@ fun AddScreen(
     var tags by remember { mutableStateOf<List<Tag>>(emptyList()) }
     var selectedPriorityIndex by remember { mutableStateOf(0) }
     val context = LocalContext.current
-    var Priority = 0
+
+    // Snack bar state
+    var snackBarVisible by remember { mutableStateOf(false) }
+    var snackBarMessage by remember { mutableStateOf("") }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
@@ -103,15 +108,23 @@ fun AddScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        val task = Task(0,
-                            title,
-                            description,
-                            dueDate,
-                            false,
-                            priority,
-                            listOf(),
-                            null)
-                        onAddTaskClicked(task)
+                        if (title != "" && description != "" && dueDate != "") {
+                            Log.v("fatt", "Omad inja")
+                            val task = Task(0,
+                                title,
+                                description,
+                                dueDate,
+                                false,
+                                priority,
+                                tags,
+                                null)
+                            Log.v("fatt", task.toString())
+                            onAddTaskClicked(task)
+                        } else {
+                            snackBarVisible = true
+                            snackBarMessage = "پر کردن همه موارد الزامی است."
+                        }
+
                     },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
@@ -300,10 +313,20 @@ fun AddScreen(
                     )
                     priority = selectedPriorityIndex
                 }
+            }
+        }
 
-
-
-
+        // Show snack bar
+        if (snackBarVisible) {
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+                action = {
+                    TextButton(onClick = { snackBarVisible = false }) {
+                        androidx.compose.material3.Text(text = "بستن")
+                    }
+                }
+            ) {
+                androidx.compose.material3.Text(text = snackBarMessage)
             }
         }
     }

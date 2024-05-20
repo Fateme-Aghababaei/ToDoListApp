@@ -23,6 +23,9 @@ class TaskRepositoryImpl : TaskRepository {
 
     override suspend fun addTask(token: String, task: Task): Boolean {
         val response = RetrofitInstance.api.addTask("Token $token", task)
+        Log.v("fatt", "res: ${response.code()}")
+        Log.v("fatt", "res: ${response.message()}")
+        Log.v("fatt", "res: ${response.isSuccessful}")
         return response.isSuccessful
     }
 

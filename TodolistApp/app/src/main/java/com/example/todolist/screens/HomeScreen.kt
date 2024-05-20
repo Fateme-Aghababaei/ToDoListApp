@@ -389,13 +389,8 @@ fun TaskUI(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(onClick = {
-                    // TODO: Add delete functionality
                     taskViewModel.deleteTask(token, task.id)
-                    Log.v("fatt", taskViewModel.deleteTaskStatus.value.toString())
-                    if (taskViewModel.deleteTaskStatus.value) {
-                        Log.v("fatt", "HERE")
-                        refreshOnClick()
-                    }
+                    refreshOnClick()
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
