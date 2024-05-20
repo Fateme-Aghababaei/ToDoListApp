@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = OrangePrimaryLight,
+    primary = OrangePrimaryDark,
     secondary = OrangeSecondaryLight,
     tertiary = GrayTertiaryLight,
     background = Color(0xFFFFFFFF),
@@ -53,7 +53,7 @@ fun ToDoListTheme(
 //            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 //        }
 
-        darkTheme -> DarkColorScheme
+        darkTheme -> LightColorScheme
         else -> LightColorScheme
     }
     val view = LocalView.current

@@ -17,18 +17,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -46,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
@@ -62,7 +65,7 @@ var items = listOf("برچسب ۱", "برچسب ۲", "برچسب ۳")
 fun AddScreen(
     modifier: Modifier = Modifier,
     onCancelClicked: () -> Unit,
-    onAddTaskClicked: (task:Task) -> Unit
+    onAddTaskClicked: (task: Task) -> Unit
 ) {
 
     var title by remember { mutableStateOf("") }
@@ -85,7 +88,7 @@ fun AddScreen(
                     title = {
                         Text(
                             text = "کارات",
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge.copy(color = Color.Black)
                         )
                     },
                     colors = topAppBarColors(
@@ -104,32 +107,6 @@ fun AddScreen(
                         }
                     },
                 )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        if (title != "" && description != "" && dueDate != "") {
-                            Log.v("fatt", "Omad inja")
-                            val task = Task(0,
-                                title,
-                                description,
-                                dueDate,
-                                false,
-                                priority,
-                                tags,
-                                null)
-                            Log.v("fatt", task.toString())
-                            onAddTaskClicked(task)
-                        } else {
-                            snackBarVisible = true
-                            snackBarMessage = "پر کردن همه موارد الزامی است."
-                        }
-
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(Icons.Default.Check, contentDescription = "Add")
-                }
             }
         ) {
             LazyColumn(
@@ -146,12 +123,13 @@ fun AddScreen(
                         onValueChange = {
                             title = it
                         },
-                        label = { Text("عنوان") },
+
+                        label = { Text("عنوان", style = MaterialTheme.typography.bodyMedium) },
                         singleLine = true,
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth(),
-                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     )
@@ -164,12 +142,12 @@ fun AddScreen(
                         onValueChange = {
                             description = it
                         },
-                        label = { Text("توضیحات") },
+                        label = { Text("توضیحات", style = MaterialTheme.typography.bodyMedium) },
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth()
                             .height(100.dp),
-                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
@@ -183,8 +161,12 @@ fun AddScreen(
                     OutlinedTextField(
                         value = searchText,
                         onValueChange = { searchText = it },
-                        label = { Text("برچسب") },
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        label = { Text("برچسب", style = MaterialTheme.typography.bodyMedium) },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
+
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
 //                        trailingIcon = {
 //                            IconButton(onClick = {
 //
@@ -229,25 +211,34 @@ fun AddScreen(
                     OutlinedTextField(
                         value = dueDate,
                         onValueChange = { dueDate = it },
-                        label = { Text("تاریخ") },
-
+                        label = { Text("تاریخ", style = MaterialTheme.typography.bodyMedium) },
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth()
                             .clickable {
                                 datePickerDialog.show()
                             },
-                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         enabled = false,
-
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+                            disabledBorderColor = MaterialTheme.colorScheme.onBackground,
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                         trailingIcon = {
                             IconButton(onClick = {
                                 datePickerDialog.show()
                             }) {
-                                Icon(imageVector = Icons.Default.DateRange,
-                                    tint = MaterialTheme.colorScheme.primary,contentDescription = "انتخاب تاریخ")
+                                Icon(
+                                    imageVector = Icons.Default.DateRange,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    contentDescription = "انتخاب تاریخ"
+                                )
                             }
                         }
                     )
@@ -266,23 +257,34 @@ fun AddScreen(
                     OutlinedTextField(
                         value = dueTime,
                         onValueChange = { dueTime = it },
-                        label = { Text("زمان") },
+                        label = { Text("زمان", style = MaterialTheme.typography.bodyMedium) },
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth()
                             .clickable {
                                 timePickerDialog.show()
                             },
-                        textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         enabled = false,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+                            disabledBorderColor = MaterialTheme.colorScheme.onBackground,
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                         trailingIcon = {
                             IconButton(onClick = {
                                 timePickerDialog.show()
                             }) {
-                                Icon(imageVector = Icons.Default.AccessTime,
-                                    tint = MaterialTheme.colorScheme.primary,contentDescription = "انتخاب زمان")
+                                Icon(
+                                    imageVector = Icons.Default.AccessTime,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    contentDescription = "انتخاب زمان"
+                                )
                             }
                         }
                     )
@@ -294,14 +296,30 @@ fun AddScreen(
                     OutlinedTextField(
                         value = priorityOptions[selectedPriorityIndex],
                         onValueChange = { /* No action needed as it's read-only */ },
-                        label = { Text("اولویت") },
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        label = { Text("اولویت", style = MaterialTheme.typography.bodyMedium) },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedPriorityIndex =
+                                    (selectedPriorityIndex + 1) % priorityOptions.size
+                            },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         enabled = false,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+                            disabledBorderColor = MaterialTheme.colorScheme.onBackground,
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                         trailingIcon = {
                             IconButton(onClick = {
                                 // Toggle dropdown visibility
-                                selectedPriorityIndex = (selectedPriorityIndex + 1) % priorityOptions.size
+                                selectedPriorityIndex =
+                                    (selectedPriorityIndex + 1) % priorityOptions.size
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
@@ -313,6 +331,36 @@ fun AddScreen(
                     )
                     priority = selectedPriorityIndex
                 }
+
+                item {
+                    Button(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        onClick = {
+                            if (title != "" && description != "" && dueDate != "") {
+                                Log.v("fatt", "Omad inja")
+                                val task = Task(
+                                    0,
+                                    title,
+                                    description,
+                                    dueDate,
+                                    false,
+                                    priority,
+                                    tags,
+                                    null
+                                )
+                                Log.v("fatt", task.toString())
+                                onAddTaskClicked(task)
+                            } else {
+                                snackBarVisible = true
+                                snackBarMessage = "پر کردن همه موارد الزامی است."
+                            }
+                        }) {
+                        Text(text = "افزودن وظیفه", style = MaterialTheme.typography.titleSmall, color = Color.White)
+                    }
+                }
             }
         }
 
@@ -322,15 +370,24 @@ fun AddScreen(
                 modifier = Modifier.padding(16.dp),
                 action = {
                     TextButton(onClick = { snackBarVisible = false }) {
-                        androidx.compose.material3.Text(text = "بستن")
+                        Text(
+                            text = "بستن",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
             ) {
-                androidx.compose.material3.Text(text = snackBarMessage)
+                Text(
+                    text = snackBarMessage,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
             }
         }
     }
 }
+
 @Composable
 fun SearchResultsList(
     searchResults: List<String>,
@@ -338,7 +395,7 @@ fun SearchResultsList(
 ) {
     searchResults.forEachIndexed { index, result ->
         Text(
-            text = result,
+            text = result, style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.clickable(onClick = {
                 onItemClick(result)
             })
