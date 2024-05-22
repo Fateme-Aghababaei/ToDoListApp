@@ -5,71 +5,37 @@ import android.app.TimePickerDialog
 import android.util.Log
 import android.widget.DatePicker
 import android.widget.TimePicker
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
-import java.util.Calendar
-
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +47,6 @@ fun AddScreen(
     onAddTaskClicked: (task: Task) -> Unit,
     initialTitle: String
 ) {
-
     var title by remember { mutableStateOf(initialTitle) }
     var description by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
@@ -93,7 +58,6 @@ fun AddScreen(
 
     val allTags by taskViewModel.allTags.collectAsState()
 
-    // Snack bar state
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
 
@@ -112,14 +76,12 @@ fun AddScreen(
                             style = MaterialTheme.typography.titleLarge.copy(color = Color.Black)
                         )
                     },
-                    colors = topAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
                         titleContentColor = Color.Green,
                     ),
                     actions = {
-                        IconButton(onClick = {
-                            onCancelClicked()
-                        }) {
+                        IconButton(onClick = { onCancelClicked() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                                 contentDescription = "profile",
@@ -138,14 +100,10 @@ fun AddScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // title
                 item {
                     OutlinedTextField(
                         value = title,
-                        onValueChange = {
-                            title = it
-                        },
-
+                        onValueChange = { title = it },
                         label = { Text("عنوان", style = MaterialTheme.typography.bodyMedium) },
                         singleLine = true,
                         modifier = Modifier
@@ -157,13 +115,10 @@ fun AddScreen(
                     )
                 }
 
-                // description
                 item {
                     OutlinedTextField(
                         value = description,
-                        onValueChange = {
-                            description = it
-                        },
+                        onValueChange = { description = it },
                         label = { Text("توضیحات", style = MaterialTheme.typography.bodyMedium) },
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
@@ -174,7 +129,7 @@ fun AddScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
                 }
-                //Tag
+
                 item {
                     Column(
                         modifier = Modifier
@@ -187,13 +142,11 @@ fun AddScreen(
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
                         ) {
                             items(allTags) { tag ->
                                 var isSelected by remember { mutableStateOf(tags.contains(tag)) }
-
                                 FilterChip(
                                     selected = isSelected,
                                     onClick = {
@@ -209,11 +162,6 @@ fun AddScreen(
                                         containerColor = MaterialTheme.colorScheme.tertiary,
                                         selectedContainerColor = MaterialTheme.colorScheme.secondary,
                                     ),
-//                                    border = FilterChipDefaults.filterChipBorder(
-//                                        borderColor = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary,
-//                                        selectedBorderColor = MaterialTheme.colorScheme.secondary,
-//                                        borderWidth = 1.dp
-//                                    ),
                                     leadingIcon = {
                                         if (isSelected) {
                                             Icon(imageVector = Icons.Default.Check, contentDescription = "check")
@@ -225,7 +173,6 @@ fun AddScreen(
                     }
                 }
 
-                // Date with Calendar Icon
                 item {
                     val calendar = Calendar.getInstance()
                     val datePickerDialog = DatePickerDialog(
@@ -244,9 +191,7 @@ fun AddScreen(
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth()
-                            .clickable {
-                                datePickerDialog.show()
-                            },
+                            .clickable { datePickerDialog.show() },
                         textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -255,14 +200,11 @@ fun AddScreen(
                             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
                             disabledTextColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
-                            IconButton(onClick = {
-                                datePickerDialog.show()
-                            }) {
+                            IconButton(onClick = { datePickerDialog.show() }) {
                                 Icon(
                                     imageVector = Icons.Default.DateRange,
                                     tint = MaterialTheme.colorScheme.primary,
@@ -272,6 +214,7 @@ fun AddScreen(
                         }
                     )
                 }
+
                 item {
                     val calendar = Calendar.getInstance()
                     val timePickerDialog = TimePickerDialog(
@@ -290,9 +233,7 @@ fun AddScreen(
                         modifier = Modifier
                             .padding(16.dp, 8.dp)
                             .fillMaxWidth()
-                            .clickable {
-                                timePickerDialog.show()
-                            },
+                            .clickable { timePickerDialog.show() },
                         textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -301,14 +242,11 @@ fun AddScreen(
                             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
                             disabledTextColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
-                            IconButton(onClick = {
-                                timePickerDialog.show()
-                            }) {
+                            IconButton(onClick = { timePickerDialog.show() }) {
                                 Icon(
                                     imageVector = Icons.Default.AccessTime,
                                     tint = MaterialTheme.colorScheme.primary,
@@ -318,13 +256,13 @@ fun AddScreen(
                         }
                     )
                 }
+
                 val priorityOptions = listOf("مشخص نشده", "کم", "متوسط", "زیاد")
-                // Priority Dropdown
+
                 item {
-                    // Dropdown to select priority
                     OutlinedTextField(
                         value = priorityOptions[selectedPriorityIndex],
-                        onValueChange = { /* No action needed as it's read-only */ },
+                        onValueChange = { },
                         label = { Text("اولویت", style = MaterialTheme.typography.bodyMedium) },
                         modifier = Modifier
                             .padding(16.dp)
@@ -340,13 +278,11 @@ fun AddScreen(
                             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
                             unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
                             disabledTextColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
                             IconButton(onClick = {
-                                // Toggle dropdown visibility
                                 selectedPriorityIndex =
                                     (selectedPriorityIndex + 1) % priorityOptions.size
                             }) {
@@ -368,7 +304,7 @@ fun AddScreen(
                             .fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         onClick = {
-                            if (title != "" && description != "" && dueDate != "") {
+                            if (title.isNotEmpty() && description.isNotEmpty() && dueDate.isNotEmpty()) {
                                 val task = Task(
                                     0,
                                     title,
@@ -396,7 +332,6 @@ fun AddScreen(
             }
         }
 
-        // Show snack bar
         if (snackBarVisible) {
             Snackbar(
                 modifier = Modifier.padding(16.dp),
