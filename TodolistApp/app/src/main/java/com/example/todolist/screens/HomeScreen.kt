@@ -3,12 +3,12 @@ package com.example.todolist.screens
 import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -49,6 +50,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,14 +85,14 @@ fun HomeScreen(
                         containerColor = MaterialTheme.colorScheme.tertiary,
                     ),
                     actions = {
-                        IconButton(onClick = { var menuExpanded = true }) {
+                        var menuExpanded by remember { mutableStateOf(false) }
+                        IconButton(onClick = { menuExpanded = true }) {
                             Icon(
                                 imageVector = Icons.Outlined.AccountCircle,
                                 contentDescription = "profile",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
-                        var menuExpanded = false
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false }
@@ -108,7 +110,11 @@ fun HomeScreen(
                                 }
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                    Text(text = "پست الکترونیک", fontSize = 20.sp, /* fontWeight = FontWeight.Bold */ )
+                                    Text(
+                                        text = "پست الکترونیک",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
                                 }
                                 Spacer(modifier = Modifier.height(8.dp))
                                 OutlinedButton(
@@ -116,7 +122,9 @@ fun HomeScreen(
                                         // Handle logout action
                                     },
                                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 8.dp)
                                 ) {
                                     Text(text = "خروج از حساب کاربری")
                                 }
@@ -148,7 +156,6 @@ fun HomeScreen(
         }
     }
 }
-
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -234,6 +241,33 @@ fun TaskUI(
                     taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun DrawerContent(
+    onProfileClicked: () -> Unit,
+    onLogoutClicked: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Icon(
+            imageVector = Icons.Outlined.AccountCircle,
+            contentDescription = "Avatar",
+            modifier = Modifier.size(80.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Text(text = "پست الکترونیک", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedButton(
+            onClick = onLogoutClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+        ) {
+            Text(text = "خروج از حساب کاربری")
         }
     }
 }
