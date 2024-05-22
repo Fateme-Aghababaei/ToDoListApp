@@ -1,6 +1,7 @@
 package com.example.todolist
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,6 +11,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.todolist.navigation.Screens
 import com.example.todolist.screens.AddScreen
 import com.example.todolist.screens.HomeScreen
@@ -34,6 +36,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val fileContent = intent?.let {
+            if (it.action == Intent.ACTION_VIEW) {
+                it.data?.let { uri ->
+                    contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+                        reader?.readText()
+                    }
+                }
+            } else null
+        }
         setContent {
             ToDoListTheme {
                 val navController = rememberNavController()
@@ -87,6 +98,28 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+                    //
+                    composable(
+                        route = Screens.ScreenAdd.route,
+                        arguments = listOf(navArgument("initialTitle") { defaultValue = "" })
+                    ) { backStackEntry ->
+                        val initialTitle = backStackEntry.arguments?.getString("initialTitle") ?: ""
+                        AddScreen(
+                            modifier = Modifier,
+                            taskViewModel = taskViewModel,
+                            token = sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),
+                            onCancelClicked = {
+                                navController.navigate(Screens.ScreenHome.route)
+                            },
+                            onAddTaskClicked = {
+                                taskViewModel.addTask(
+                                    sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(), it
+                                )
+                                navController.navigate(Screens.ScreenHome.route)
+                            },
+                            initialTitle = initialTitle
+                        )
+                    }
 
                     // add task
                     composable(route = Screens.ScreenAdd.route) {
@@ -94,18 +127,28 @@ class MainActivity : ComponentActivity() {
                             taskViewModel = taskViewModel,
                             token = sharedPref.getString(
                                 SHARED_PREFS_TOKEN,
-                                ""
+                                "",
                             ).toString(),
                             onCancelClicked = {
                                 navController.navigate(Screens.ScreenHome.route)
-                            }, onAddTaskClicked = {
+                            },
+                            onAddTaskClicked = {
                                 taskViewModel.addTask(
                                     sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(), it
                                 )
                                 navController.navigate(Screens.ScreenHome.route)
-                            })
+                            },"")
                     }
-
+                    //
+                    val fileContent = intent?.let {
+                        if (it.action == Intent.ACTION_VIEW) {
+                            it.data?.let { uri ->
+                                contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+                                    reader?.readText()
+                                }
+                            }
+                        } else null
+                    }
                     // profile
                     composable(route = Screens.ScreenProfile.route) {
                         ProfileScreen()

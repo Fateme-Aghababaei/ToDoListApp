@@ -70,7 +70,6 @@ import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import java.util.Calendar
 
-var items = listOf("برچسب ۱", "برچسب ۲", "برچسب ۳")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,10 +78,11 @@ fun AddScreen(
     taskViewModel: TaskViewModel,
     token: String,
     onCancelClicked: () -> Unit,
-    onAddTaskClicked: (task: Task) -> Unit
+    onAddTaskClicked: (task: Task) -> Unit,
+    initialTitle: String
 ) {
 
-    var title by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf(initialTitle) }
     var description by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
     var dueTime by remember { mutableStateOf("") }
@@ -93,14 +93,14 @@ fun AddScreen(
 
     val allTags by taskViewModel.allTags.collectAsState()
 
+    // Snack bar state
+    var snackBarVisible by remember { mutableStateOf(false) }
+    var snackBarMessage by remember { mutableStateOf("") }
+
     LaunchedEffect(key1 = allTags) {
         taskViewModel.getTags(token)
         Log.v("fatt", "all tags: $allTags")
     }
-
-    // Snack bar state
-    var snackBarVisible by remember { mutableStateOf(false) }
-    var snackBarMessage by remember { mutableStateOf("") }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(
@@ -416,24 +416,6 @@ fun AddScreen(
                     color = Color.White
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun SearchResultsList(
-    searchResults: List<String>,
-    onItemClick: (String) -> Unit
-) {
-    searchResults.forEachIndexed { index, result ->
-        Text(
-            text = result, style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.clickable(onClick = {
-                onItemClick(result)
-            })
-        )
-        if (index == searchResults.lastIndex) {
-            return@forEachIndexed
         }
     }
 }
