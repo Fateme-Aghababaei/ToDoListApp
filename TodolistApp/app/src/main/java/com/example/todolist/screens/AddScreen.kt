@@ -75,20 +75,21 @@ fun AddScreen(
                     title = {
                         Text(
                             text = "اضافه کردن کار جدید",
-                            style = MaterialTheme.typography.titleLarge.copy(color = Color.Black)
+                            style = MaterialTheme.typography.titleLarge
                         )
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        titleContentColor = Color.Green,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        actionIconContentColor = Color.Black
                     ),
                     actions = {
                         IconButton(onClick = { onCancelClicked() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                                 contentDescription = "profile",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.graphicsLayer(rotationZ = 180f)
+                                modifier = Modifier.graphicsLayer(rotationZ = 180f),
+                                tint = MaterialTheme.colorScheme.onPrimary,
                             )
                         }
                     },
@@ -114,6 +115,11 @@ fun AddScreen(
                         textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                     )
                 }
 
@@ -128,7 +134,12 @@ fun AddScreen(
                             .height(100.dp),
                         textStyle = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                        ),
                     )
                 }
 
@@ -215,11 +226,9 @@ fun AddScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         enabled = false,
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
-                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            disabledLabelColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
                             IconButton(onClick = { datePickerDialog.show() }) {
@@ -257,11 +266,9 @@ fun AddScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         enabled = false,
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
-                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            disabledLabelColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
                             IconButton(onClick = { timePickerDialog.show() }) {
@@ -293,11 +300,9 @@ fun AddScreen(
                         shape = RoundedCornerShape(12.dp),
                         enabled = false,
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
                             disabledBorderColor = MaterialTheme.colorScheme.onBackground,
-                            disabledTextColor = MaterialTheme.colorScheme.onBackground
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            disabledLabelColor = MaterialTheme.colorScheme.onBackground
                         ),
                         trailingIcon = {
                             IconButton(onClick = {
@@ -319,7 +324,8 @@ fun AddScreen(
                     Button(
                         modifier = Modifier
                             .padding(16.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .height(48.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         onClick = {
                             if (title.isNotEmpty() && description.isNotEmpty() && dueDate.isNotEmpty()) {
@@ -432,22 +438,27 @@ fun AddFilterChip(token: String, taskViewModel: TaskViewModel) {
                 )
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        taskViewModel.addTag(token, textFieldValue)
-                        closeDialog()
-                    }
+                Row(
+                    modifier = Modifier.padding(all = 8.dp),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text("تایید")
-                }
-            },
-            dismissButton = {
-                 OutlinedButton(
-                    onClick = {
-                        closeDialog()
+                    OutlinedButton(
+                        onClick = {
+                            closeDialog()
+                        }
+                    ) {
+                        Text("انصراف" , style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground))
                     }
-                ) {
-                    Text("انصراف")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            // Handle confirm action
+                            taskViewModel.addTag(token, textFieldValue)
+                            closeDialog()
+                        }
+                    ) {
+                        Text("تایید", style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
             },
             containerColor = MaterialTheme.colorScheme.background

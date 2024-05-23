@@ -91,11 +91,11 @@ fun LoginScreen(
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Image(
-                        painter = painterResource(id = if (isSystemInDarkTheme()) R.drawable.hive2 else R.drawable.hive1),
+                        painter = painterResource(R.drawable.carrot),
                         contentDescription = "Logo",
                         modifier = Modifier
                             .padding(16.dp)
-                            .size(170.dp)
+                            .size(160.dp)
                             .align(Alignment.CenterHorizontally)
                     )
 
@@ -120,7 +120,7 @@ fun LoginScreen(
                         label = { Text("پست الکترونیک") },
                         singleLine = true,
                         modifier = Modifier
-                            .padding(16.dp, 8.dp)
+                            .padding(16.dp, 2.dp)
                             .fillMaxWidth(),
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
                         leadingIcon = {
@@ -159,7 +159,7 @@ fun LoginScreen(
                         label = { Text("رمز عبور") },
                         singleLine = true,
                         modifier = Modifier
-                            .padding(16.dp, 8.dp)
+                            .padding(16.dp, 2.dp)
                             .fillMaxWidth(),
                         textStyle = TextStyle(textDirection = TextDirection.ContentOrLtr),
                         shape = RoundedCornerShape(12.dp),
@@ -203,7 +203,7 @@ fun LoginScreen(
                     Button(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(32.dp, 8.dp)
+                            .padding(32.dp, 4.dp)
                             .height(48.dp),
                         onClick = {
                             if (email != "" || password != "") {

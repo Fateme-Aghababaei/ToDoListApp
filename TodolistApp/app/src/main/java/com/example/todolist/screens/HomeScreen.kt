@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,11 +62,14 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.todolist.R
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
@@ -106,15 +113,18 @@ fun HomeScreen(
                     Text(text = "کارات", style = MaterialTheme.typography.titleLarge)
                 },
                 colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = Color.Black
                 ),
                 actions = {
                     var menuExpanded by remember { mutableStateOf(false) }
                     IconButton(onClick = { menuExpanded = true }) {
                         Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
+                            imageVector = Icons.Outlined.PersonOutline,
                             contentDescription = "profile",
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                     DropdownMenu(expanded = menuExpanded,
@@ -126,14 +136,12 @@ fun HomeScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.AccountCircle,
-                                    contentDescription = "Avatar",
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(48.dp)
+                                Image(
+                                    painter = painterResource(id = R.drawable.profile),
+                                    contentDescription = "profile"
                                 )
                             }
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center
@@ -144,7 +152,7 @@ fun HomeScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
                             OutlinedButton(
                                 onClick = {
                                     Log.v("fatt", "Logout button clicked")
@@ -155,7 +163,10 @@ fun HomeScreen(
                                     .fillMaxWidth()
                                     .padding(top = 8.dp)
                             ) {
-                                Text(text = "خروج از حساب کاربری")
+                                Text(
+                                    text = "خروج از حساب کاربری",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
                         }
                     }
@@ -167,7 +178,7 @@ fun HomeScreen(
                     onAddTaskClicked()
                 }, containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = "Add", modifier = modifier.size(32.dp))
             }
         }) {
             LazyColumn(
@@ -176,6 +187,9 @@ fun HomeScreen(
             ) {
                 items(items = allTasks) { task ->
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token, refreshOnClick)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(64.dp))
                 }
             }
         }
@@ -207,10 +221,7 @@ fun TaskUI(
                 3 -> Color(0xFFEAFFED)
                 else -> Color(0xFFF5F5F5)
             }
-        ),
-//        content = {
-//
-//        }
+        )
     ) {
         Row(modifier = modifier
             .fillMaxWidth()
@@ -235,7 +246,12 @@ fun TaskUI(
             Column(
                 modifier = modifier.widthIn(150.dp, 200.dp)
             ) {
-                Text(text = task.title, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = task.title,
+                    style = MaterialTheme.typography.titleMedium.copy(textDecoration = if (isChecked) TextDecoration.LineThrough else TextDecoration.None),
+                    color = if (isChecked) Color.Gray else MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = task.description,
                     style = MaterialTheme.typography.bodyMedium,
@@ -247,7 +263,7 @@ fun TaskUI(
                     for (tag in task.tags) {
                         item {
                             AssistChip(
-                                onClick = { /*TODO*/ },
+                                onClick = { },
                                 label = {
                                     Text(
                                         text = tag.title,
@@ -268,7 +284,7 @@ fun TaskUI(
                     refreshOnClick()
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
+                        imageVector = Icons.Outlined.Delete,
                         contentDescription = "Delete",
                         tint = Color.DarkGray
                     )
@@ -285,9 +301,9 @@ fun TaskUI(
                     context.startActivity(shareIntent)
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Share,
+                        imageVector = Icons.Outlined.Share,
                         contentDescription = "Share",
-                        tint = Color.Gray
+                        tint = Color.DarkGray
                     )
                 }
 
@@ -297,36 +313,6 @@ fun TaskUI(
                     taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
                 })
             }
-        }
-    }
-}
-
-@Composable
-fun DrawerContent(
-    onProfileClicked: () -> Unit, onLogoutClicked: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.AccountCircle,
-            contentDescription = "Avatar",
-            modifier = Modifier.size(80.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Text(text = "پست الکترونیک", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedButton(
-            onClick = onLogoutClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-        ) {
-            Text(text = "خروج از حساب کاربری")
         }
     }
 }
