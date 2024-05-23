@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
 
         // Extract file content if the activity was started with ACTION_VIEW intent
         val fileContent: String? = intent?.takeIf { it.action == Intent.ACTION_VIEW }?.data?.let { uri ->
@@ -49,8 +50,11 @@ class MainActivity : ComponentActivity() {
                     // Login screen
                     composable(route = Screens.ScreenLogin.route) {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
+                            Log.v("fatt", "before token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
-                            navController.navigate(Screens.ScreenHome.route)
+                            Log.v("fatt", "after token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
+                            if (sharedPref.getString(SHARED_PREFS_TOKEN, "") != "")
+                                navController.navigate(Screens.ScreenHome.route)
                         }, {
                             navController.navigate(Screens.ScreenSignup.route)
                         })
@@ -60,8 +64,10 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screens.ScreenSignup.route) {
                         SignupScreen(Modifier, userViewModel, { signedUpToken ->
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, signedUpToken).apply()
-                            navController.navigate(Screens.ScreenHome.route)
+                            if (sharedPref.getString(SHARED_PREFS_TOKEN, "") != "")
+                                navController.navigate(Screens.ScreenHome.route)
                         }, {
+
                             navController.navigate(Screens.ScreenLogin.route)
                         })
                     }
@@ -69,11 +75,10 @@ class MainActivity : ComponentActivity() {
                     // Home screen
                     composable(route = Screens.ScreenHome.route) {
                         HomeScreen(
-                            modifier = Modifier, taskViewModel = taskViewModel,
+                            modifier = Modifier,
+                            taskViewModel = taskViewModel,
+                            userViewModel = userViewModel,
                             token = sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),
-                            onProfileClicked = {
-                                navController.navigate(Screens.ScreenProfile.route)
-                            },
                             onAddTaskClicked = {
                                 navController.navigate(Screens.ScreenAdd.route)
                             },
@@ -81,6 +86,20 @@ class MainActivity : ComponentActivity() {
                                 taskViewModel.getAllTasks(
                                     sharedPref.getString(SHARED_PREFS_TOKEN, "").toString()
                                 )
+                            },
+                            onLogout = {
+                                sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
+                                val tokenCleared = sharedPref.getString(SHARED_PREFS_TOKEN, "").isNullOrEmpty()
+                                Log.v("fatt", "token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
+                                Log.v("fatt", "token cleared: $tokenCleared")
+                                userViewModel.setTokenEmpty()
+
+//                                Log.v("fatt", "Token cleared: $tokenCleared")
+//                                if (tokenCleared) {
+//                                    Log.v("fatt", "Navigating to login screen")
+//                                    navController.navigate(Screens.ScreenLogin.route)
+//                                }
+                                navController.navigate(Screens.ScreenLogin.route)
                             }
                         )
                     }
@@ -107,11 +126,6 @@ class MainActivity : ComponentActivity() {
                             initialTitle = fileContent ?: initialTitle // Use file content if available
                         )
                     }
-
-                    // Profile screen
-                    composable(route = Screens.ScreenProfile.route) {
-                        ProfileScreen()
-                    }
                 }
             }
         }
@@ -121,8 +135,8 @@ class MainActivity : ComponentActivity() {
         // Navigate to AddScreen if file content is available
         return when {
             fileContent != null -> Screens.ScreenAdd.route
-            sharedPref.getString(SHARED_PREFS_TOKEN, null) != null -> Screens.ScreenHome.route
-            else -> Screens.ScreenLogin.route
+            sharedPref.getString(SHARED_PREFS_TOKEN, "").isNullOrEmpty() -> Screens.ScreenLogin.route
+            else -> Screens.ScreenHome.route
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.todolist.screens
 import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,22 +57,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
+import com.example.todolist.viewModel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     taskViewModel: TaskViewModel,
+    userViewModel: UserViewModel,
     token: String,
-    onProfileClicked: () -> Unit,
     onAddTaskClicked: () -> Unit,
-    refreshOnClick: () -> Unit
+    refreshOnClick: () -> Unit,
+    onLogout: () -> Unit
 ) {
 
     val allTasks by taskViewModel.allTasks.collectAsState()
+    val logoutSuccess by userViewModel.logoutSuccess.collectAsState()
 
     LaunchedEffect(key1 = allTasks) {
         taskViewModel.getAllTasks(token)
+    }
+
+    LaunchedEffect(key1 = logoutSuccess) {
+        Log.v("fatt", "logoutSuccess: $logoutSuccess")
+        if (logoutSuccess) {
+            onLogout()
+            userViewModel.resetLogoutSuccess()
+        }
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -119,7 +131,8 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 OutlinedButton(
                                     onClick = {
-                                        // Handle logout action
+                                        Log.v("fatt", "Logout button clicked")
+                                        userViewModel.logout(token)
                                     },
                                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
                                     modifier = Modifier
@@ -250,7 +263,9 @@ fun DrawerContent(
     onProfileClicked: () -> Unit,
     onLogoutClicked: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         Icon(
             imageVector = Icons.Outlined.AccountCircle,
             contentDescription = "Avatar",

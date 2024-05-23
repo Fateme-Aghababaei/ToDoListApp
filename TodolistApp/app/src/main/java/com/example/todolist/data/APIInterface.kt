@@ -2,6 +2,7 @@ package com.example.todolist.data
 
 import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
+import com.example.todolist.models.User
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -61,4 +62,14 @@ interface APIInterface {
     suspend fun getTags(
         @Header("Authorization") authToken: String
     ): Response<List<Tag>>
+
+    @POST("users/logout/")
+    suspend fun logout(
+        @Header("Authorization") authToken: String
+    ): Response<Map<String, String>>
+
+    @GET("task/get_tasks/")
+    suspend fun getUser(
+        @Header("Authorization") authToken: String
+    ): Response<User>
 }

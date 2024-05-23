@@ -26,4 +26,9 @@ class UserRepositoryImpl : UserRepository {
             throw Exception(response.code().toString())
         }
     }
+
+    override suspend fun logout(token: String): Boolean {
+        val response = RetrofitInstance.api.logout("Token $token")
+        return response.isSuccessful
+    }
 }
