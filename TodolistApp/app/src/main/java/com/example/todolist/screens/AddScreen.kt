@@ -74,7 +74,7 @@ fun AddScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = "کارات",
+                            text = "اضافه کردن کار جدید",
                             style = MaterialTheme.typography.titleLarge.copy(color = Color.Black)
                         )
                     },

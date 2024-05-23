@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
@@ -25,7 +28,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -47,11 +53,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,79 +100,78 @@ fun HomeScreen(
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = "کارات", style = MaterialTheme.typography.titleLarge)
-                    },
-                    colors = topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                    ),
-                    actions = {
-                        var menuExpanded by remember { mutableStateOf(false) }
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(
-                                imageVector = Icons.Outlined.AccountCircle,
-                                contentDescription = "profile",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
+        Scaffold(topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "کارات", style = MaterialTheme.typography.titleLarge)
+                },
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                ),
+                actions = {
+                    var menuExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountCircle,
+                            contentDescription = "profile",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    DropdownMenu(expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp)
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
                             ) {
-                                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.AccountCircle,
-                                        contentDescription = "Avatar",
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(48.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                    Text(
-                                        text = user?.email ?: "",
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(8.dp))
-                                OutlinedButton(
-                                    onClick = {
-                                        Log.v("fatt", "Logout button clicked")
-                                        userViewModel.logout(token)
-                                    },
-                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 8.dp)
-                                ) {
-                                    Text(text = "خروج از حساب کاربری")
-                                }
+                                Icon(
+                                    imageVector = Icons.Outlined.AccountCircle,
+                                    contentDescription = "Avatar",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(48.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = user?.email ?: "",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            OutlinedButton(
+                                onClick = {
+                                    Log.v("fatt", "Logout button clicked")
+                                    userViewModel.logout(token)
+                                },
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp)
+                            ) {
+                                Text(text = "خروج از حساب کاربری")
                             }
                         }
-                    },
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        onAddTaskClicked()
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
+                    }
+                },
+            )
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onAddTaskClicked()
+                }, containerColor = MaterialTheme.colorScheme.primary
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
             }
-        ) {
+        }) {
             LazyColumn(
-                modifier = modifier
-                    .padding(it),
+                modifier = modifier.padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 items(items = allTasks) { task ->
@@ -189,18 +196,31 @@ fun TaskUI(
     }
     val context = LocalContext.current
 
-    Row(
-        modifier = Modifier
-            .padding(16.dp, 8.dp)
+    Card(
+        modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .padding(16.dp, 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = when (task.priority) {
+                1 -> Color(0xFFFFEAEA)
+                2 -> Color(0xFFFFFBEA)
+                3 -> Color(0xFFEAFFED)
+                else -> Color(0xFFF5F5F5)
+            }
+        ),
+//        content = {
+//
+//        }
+    ) {
+        Row(modifier = modifier
+            .fillMaxWidth()
             .drawBehind {
                 val strokeWidth = 10 * density
                 val color = when (task.priority) {
-                    1 -> Color.Red
-                    2 -> Color.Yellow
-                    3 -> Color.Green
-                    else -> Color.LightGray
+                    1 -> Color(0xFFC43E3E)
+                    2 -> Color(0xFFF5C149)
+                    3 -> Color(0xFF57AD40)
+                    else -> Color(0xFF939593)
                 }
                 drawLine(
                     color,
@@ -209,20 +229,40 @@ fun TaskUI(
                     strokeWidth
                 )
             }
-            .padding(16.dp, 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-            Text(text = task.title)
-            Text(text = task.description)
-            Text(text = task.due_date)
-            for (tag in task.tags)
-                Text(text = tag.title)
-        }
+            .padding(16.dp, 8.dp, 8.dp, 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Column(
+                modifier = modifier.widthIn(150.dp, 200.dp)
+            ) {
+                Text(text = task.title, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = task.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(text = "تاریخ: ${task.due_date}", style = MaterialTheme.typography.bodyMedium)
+                LazyRow {
+                    for (tag in task.tags) {
+                        item {
+                            AssistChip(
+                                onClick = { /*TODO*/ },
+                                label = {
+                                    Text(
+                                        text = tag.title,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                },
+                            )
+                            Spacer(Modifier.width(4.dp))
+                        }
+                    }
+                }
+            }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Row {
                 IconButton(onClick = {
                     taskViewModel.deleteTask(token, task.id)
                     refreshOnClick()
@@ -250,27 +290,26 @@ fun TaskUI(
                         tint = Color.Gray
                     )
                 }
-            }
-            Checkbox(
-                checked = isChecked,
-                onCheckedChange = {
+
+                Checkbox(checked = isChecked, onCheckedChange = {
                     isChecked = it
                     task.is_completed = it
                     taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
-                }
-            )
+                })
+            }
         }
     }
 }
 
 @Composable
 fun DrawerContent(
-    onProfileClicked: () -> Unit,
-    onLogoutClicked: () -> Unit
+    onProfileClicked: () -> Unit, onLogoutClicked: () -> Unit
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Icon(
             imageVector = Icons.Outlined.AccountCircle,
             contentDescription = "Avatar",
