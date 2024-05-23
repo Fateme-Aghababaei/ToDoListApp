@@ -13,11 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.todolist.navigation.Screens
-import com.example.todolist.screens.AddScreen
-import com.example.todolist.screens.HomeScreen
-import com.example.todolist.screens.LoginScreen
-import com.example.todolist.screens.ProfileScreen
-import com.example.todolist.screens.SignupScreen
+import com.example.todolist.screens.*
 import com.example.todolist.ui.theme.ToDoListTheme
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
@@ -33,52 +29,45 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val fileContent = intent?.let {
-            if (it.action == Intent.ACTION_VIEW) {
-                it.data?.let { uri ->
-                    contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
-                        reader?.readText()
-                    }
-                }
-            } else null
+
+        // Extract file content if the activity was started with ACTION_VIEW intent
+        val fileContent: String? = intent?.takeIf { it.action == Intent.ACTION_VIEW }?.data?.let { uri ->
+            contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+                reader?.readText()
+            }
         }
+
         setContent {
             ToDoListTheme {
                 val navController = rememberNavController()
                 val userViewModel = viewModel<UserViewModel>()
                 val taskViewModel = viewModel<TaskViewModel>()
-                // TODO - delete line after adding the logic to handle logout
-                // sharedPref.edit().putString(SHARED_PREFS_TOKEN, null).apply()
 
-                NavHost(navController, startDestination = determineStartDestination()) {
-                    // login
+                NavHost(navController, startDestination = determineStartDestination(fileContent)) {
+                    // Login screen
                     composable(route = Screens.ScreenLogin.route) {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
                             navController.navigate(Screens.ScreenHome.route)
                         }, {
-                            // Handle signup navigation here
                             navController.navigate(Screens.ScreenSignup.route)
                         })
                     }
 
-                    // signup
+                    // Signup screen
                     composable(route = Screens.ScreenSignup.route) {
                         SignupScreen(Modifier, userViewModel, { signedUpToken ->
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, signedUpToken).apply()
                             navController.navigate(Screens.ScreenHome.route)
                         }, {
-                            // Handle login navigation here
                             navController.navigate(Screens.ScreenLogin.route)
                         })
                     }
 
-                    // home
+                    // Home screen
                     composable(route = Screens.ScreenHome.route) {
-
                         HomeScreen(
                             modifier = Modifier, taskViewModel = taskViewModel,
                             token = sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(),
@@ -90,15 +79,13 @@ class MainActivity : ComponentActivity() {
                             },
                             refreshOnClick = {
                                 taskViewModel.getAllTasks(
-                                    sharedPref.getString(
-                                        SHARED_PREFS_TOKEN,
-                                        ""
-                                    ).toString()
+                                    sharedPref.getString(SHARED_PREFS_TOKEN, "").toString()
                                 )
                             }
                         )
                     }
-                    //
+
+                    // Add task screen
                     composable(
                         route = Screens.ScreenAdd.route,
                         arguments = listOf(navArgument("initialTitle") { defaultValue = "" })
@@ -117,39 +104,11 @@ class MainActivity : ComponentActivity() {
                                 )
                                 navController.navigate(Screens.ScreenHome.route)
                             },
-                            initialTitle = initialTitle
+                            initialTitle = fileContent ?: initialTitle // Use file content if available
                         )
                     }
 
-                    // add task
-                    composable(route = Screens.ScreenAdd.route) {
-                        AddScreen(modifier = Modifier,
-                            taskViewModel = taskViewModel,
-                            token = sharedPref.getString(
-                                SHARED_PREFS_TOKEN,
-                                "",
-                            ).toString(),
-                            onCancelClicked = {
-                                navController.navigate(Screens.ScreenHome.route)
-                            },
-                            onAddTaskClicked = {
-                                taskViewModel.addTask(
-                                    sharedPref.getString(SHARED_PREFS_TOKEN, "").toString(), it
-                                )
-                                navController.navigate(Screens.ScreenHome.route)
-                            },"")
-                    }
-                    //
-                    val fileContent = intent?.let {
-                        if (it.action == Intent.ACTION_VIEW) {
-                            it.data?.let { uri ->
-                                contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
-                                    reader?.readText()
-                                }
-                            }
-                        } else null
-                    }
-                    // profile
+                    // Profile screen
                     composable(route = Screens.ScreenProfile.route) {
                         ProfileScreen()
                     }
@@ -158,12 +117,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun determineStartDestination(): String {
-        // Check if the user is already logged in
-        return if (sharedPref.getString(SHARED_PREFS_TOKEN, null) != null) {
-            Screens.ScreenHome.route
-        } else {
-            Screens.ScreenLogin.route
+    private fun determineStartDestination(fileContent: String?): String {
+        // Navigate to AddScreen if file content is available
+        return when {
+            fileContent != null -> Screens.ScreenAdd.route
+            sharedPref.getString(SHARED_PREFS_TOKEN, null) != null -> Screens.ScreenHome.route
+            else -> Screens.ScreenLogin.route
         }
     }
 }
