@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
@@ -181,6 +182,10 @@ fun AddScreen(
                                         }
                                     }
                                 )
+                            }
+
+                            item {
+                                AddFilterChip(token, taskViewModel)
                             }
                         }
                     }
@@ -365,5 +370,87 @@ fun AddScreen(
                 )
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddFilterChip(token: String, taskViewModel: TaskViewModel) {
+    // State to manage the visibility of the dialog
+    var showDialog by remember { mutableStateOf(false) }
+    var textFieldValue by remember { mutableStateOf("") }
+
+    // Function to open the dialog
+    fun openDialog() {
+        showDialog = true
+    }
+
+    // Function to close the dialog
+    fun closeDialog() {
+        showDialog = false
+    }
+
+    FilterChip(
+        selected = false,
+        onClick = {
+            openDialog()
+        },
+        label = { Text(text = "برچسب جدید", style = MaterialTheme.typography.bodyMedium) },
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            selectedContainerColor = MaterialTheme.colorScheme.secondary,
+            selectedLabelColor = MaterialTheme.colorScheme.primary,
+            iconColor = MaterialTheme.colorScheme.onBackground,
+        ),
+        border = FilterChipDefaults.filterChipBorder(
+            selectedBorderColor = MaterialTheme.colorScheme.primary,
+            borderWidth = 0.dp,
+            selectedBorderWidth = 1.dp,
+            enabled = true,
+            selected = false
+        ),
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "check")
+        }
+    )
+
+    // Dialog implementation
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                closeDialog()
+            },
+            title = {
+                Text(text = "اضافه کردن برچسب جدید", style = MaterialTheme.typography.titleLarge)
+            },
+            text = {
+                OutlinedTextField(
+                    value = textFieldValue,
+                    onValueChange = { textFieldValue = it },
+                    label = { Text(text = "عنوان") }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        taskViewModel.addTag(token, textFieldValue)
+                        closeDialog()
+                    }
+                ) {
+                    Text("تایید")
+                }
+            },
+            dismissButton = {
+                 OutlinedButton(
+                    onClick = {
+                        closeDialog()
+                    }
+                ) {
+                    Text("انصراف")
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.background
+        )
     }
 }

@@ -13,4 +13,6 @@ interface TaskRepository {
     suspend fun deleteTask(token: String, id: Int): Boolean
 
     suspend fun getTags(token: String): List<Tag>
+
+    suspend fun addTag(token: String, title: String): Boolean
 }

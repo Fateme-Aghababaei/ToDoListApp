@@ -72,4 +72,11 @@ interface APIInterface {
     suspend fun getUser(
         @Header("Authorization") authToken: String
     ): Response<User>
+
+    @FormUrlEncoded
+    @POST("task/add_tag/")
+    suspend fun addTag(
+        @Header("Authorization") authToken: String,
+        @Field("title") title: String
+    ): Response<Map<String, String>>
 }

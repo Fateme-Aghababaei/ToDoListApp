@@ -24,9 +24,6 @@ class TaskRepositoryImpl : TaskRepository {
 
     override suspend fun addTask(token: String, task: Task): Boolean {
         val response = RetrofitInstance.api.addTask("Token $token", task)
-        Log.v("fatt", "res: ${response.code()}")
-        Log.v("fatt", "res: ${response.message()}")
-        Log.v("fatt", "res: ${response.isSuccessful}")
         return response.isSuccessful
     }
 
@@ -44,5 +41,14 @@ class TaskRepositoryImpl : TaskRepository {
             // throw Exception(response.code().toString())
             return emptyList()
         }
+    }
+
+    override suspend fun addTag(token: String, title: String): Boolean {
+        val response = RetrofitInstance.api.addTag("Token $token", title)
+        Log.v("fatt", "body: ${response.body()}")
+        Log.v("fatt", "body: ${response.isSuccessful}")
+        Log.v("fatt", "body: ${response.message()}")
+        Log.v("fatt", "body: ${response.code()}")
+        return response.isSuccessful
     }
 }
