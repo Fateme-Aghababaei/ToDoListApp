@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
@@ -157,10 +158,22 @@ fun AddScreen(
                                         }
                                         isSelected = !isSelected
                                     },
-                                    label = { Text(tag.title) },
+                                    label = { Text(text = tag.title, style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                    )) },
                                     colors = FilterChipDefaults.filterChipColors(
                                         containerColor = MaterialTheme.colorScheme.tertiary,
                                         selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                                        selectedLabelColor = MaterialTheme.colorScheme.primary,
+                                        selectedLeadingIconColor = MaterialTheme.colorScheme.primary,
+                                    ),
+                                    border = FilterChipDefaults.filterChipBorder(
+//                                        borderColor = Color.Blue,
+                                        selectedBorderColor = MaterialTheme.colorScheme.primary,
+                                        borderWidth = 0.dp,
+                                        selectedBorderWidth = 1.dp,
+                                        enabled = true,
+                                        selected = isSelected
                                     ),
                                     leadingIcon = {
                                         if (isSelected) {

@@ -68,7 +68,7 @@ interface APIInterface {
         @Header("Authorization") authToken: String
     ): Response<Map<String, String>>
 
-    @GET("task/get_tasks/")
+    @GET("users/get_user/")
     suspend fun getUser(
         @Header("Authorization") authToken: String
     ): Response<User>

@@ -50,9 +50,7 @@ class MainActivity : ComponentActivity() {
                     // Login screen
                     composable(route = Screens.ScreenLogin.route) {
                         LoginScreen(Modifier, userViewModel, { loggedInToken ->
-                            Log.v("fatt", "before token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
                             sharedPref.edit().putString(SHARED_PREFS_TOKEN, loggedInToken).apply()
-                            Log.v("fatt", "after token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
                             if (sharedPref.getString(SHARED_PREFS_TOKEN, "") != "")
                                 navController.navigate(Screens.ScreenHome.route)
                         }, {
@@ -90,15 +88,7 @@ class MainActivity : ComponentActivity() {
                             onLogout = {
                                 sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
                                 val tokenCleared = sharedPref.getString(SHARED_PREFS_TOKEN, "").isNullOrEmpty()
-                                Log.v("fatt", "token: ${sharedPref.getString(SHARED_PREFS_TOKEN, "")}")
-                                Log.v("fatt", "token cleared: $tokenCleared")
                                 userViewModel.setTokenEmpty()
-
-//                                Log.v("fatt", "Token cleared: $tokenCleared")
-//                                if (tokenCleared) {
-//                                    Log.v("fatt", "Navigating to login screen")
-//                                    navController.navigate(Screens.ScreenLogin.route)
-//                                }
                                 navController.navigate(Screens.ScreenLogin.route)
                             }
                         )

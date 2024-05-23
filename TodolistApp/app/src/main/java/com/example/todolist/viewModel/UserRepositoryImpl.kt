@@ -1,6 +1,7 @@
 package com.example.todolist.viewModel
 
 import android.util.Log
+import com.example.todolist.models.User
 import com.example.todolist.utils.RetrofitInstance
 
 class UserRepositoryImpl : UserRepository {
@@ -30,5 +31,18 @@ class UserRepositoryImpl : UserRepository {
     override suspend fun logout(token: String): Boolean {
         val response = RetrofitInstance.api.logout("Token $token")
         return response.isSuccessful
+    }
+
+    override suspend fun getUser(token: String): User? {
+        val response = RetrofitInstance.api.getUser("Token $token")
+        if (response.isSuccessful){
+            val user = response.body()
+            Log.v("fatt", "user: $user")
+            return user
+        }
+        else {
+            Log.v("fatt", "user: else")
+            return null
+        }
     }
 }

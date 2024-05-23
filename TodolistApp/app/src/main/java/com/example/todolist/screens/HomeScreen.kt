@@ -73,17 +73,22 @@ fun HomeScreen(
 
     val allTasks by taskViewModel.allTasks.collectAsState()
     val logoutSuccess by userViewModel.logoutSuccess.collectAsState()
+    val user by userViewModel.loggedInUser.collectAsState()
 
     LaunchedEffect(key1 = allTasks) {
         taskViewModel.getAllTasks(token)
     }
 
     LaunchedEffect(key1 = logoutSuccess) {
-        Log.v("fatt", "logoutSuccess: $logoutSuccess")
         if (logoutSuccess) {
             onLogout()
             userViewModel.resetLogoutSuccess()
         }
+    }
+
+    LaunchedEffect(key1 = user) {
+        Log.v("fatt", "home user: $user")
+        userViewModel.getUser(token)
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -123,7 +128,7 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                                     Text(
-                                        text = "پست الکترونیک",
+                                        text = user?.email ?: "",
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold
                                     )

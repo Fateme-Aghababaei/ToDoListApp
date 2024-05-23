@@ -3,6 +3,7 @@ package com.example.todolist.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todolist.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,6 +19,9 @@ class UserViewModel : ViewModel() {
 
     private val _logoutSuccess = MutableStateFlow(false)
     val logoutSuccess: StateFlow<Boolean> get() = _logoutSuccess
+
+    private val _loggedInUser = MutableStateFlow<User?>(null)
+    val loggedInUser: StateFlow<User?> = _loggedInUser
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -42,12 +46,19 @@ class UserViewModel : ViewModel() {
     fun logout(token: String) {
         viewModelScope.launch {
             val success = repository.logout(token)
-            Log.v("fatt", "success: $success")
             _logoutSuccess.value = success
         }
     }
 
     fun resetLogoutSuccess() {
         _logoutSuccess.value = false
+    }
+
+    fun getUser(token: String) {
+        viewModelScope.launch {
+            val user = repository.getUser(token)
+            _loggedInUser.value = user
+            Log.v("fatt", "viewModel user: $user")
+        }
     }
 }
