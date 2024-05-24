@@ -18,10 +18,15 @@ import com.example.todolist.ui.theme.ToDoListTheme
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
 
+/**
+ * Main activity for the ToDoList application. Manages navigation and shared preferences.
+ */
 class MainActivity : ComponentActivity() {
 
-    // Shared preferences
+    // Shared preferences key for storing the token
     private val SHARED_PREFS_TOKEN = "token"
+    
+    // Shared preferences instance
     private val sharedPref by lazy {
         getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}_sharedPreferences",
@@ -31,7 +36,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
 
         // Extract file content if the activity was started with ACTION_VIEW intent
         val fileContent: String? = intent?.takeIf { it.action == Intent.ACTION_VIEW }?.data?.let { uri ->
@@ -65,7 +69,6 @@ class MainActivity : ComponentActivity() {
                             if (sharedPref.getString(SHARED_PREFS_TOKEN, "") != "")
                                 navController.navigate(Screens.ScreenHome.route)
                         }, {
-
                             navController.navigate(Screens.ScreenLogin.route)
                         })
                     }
@@ -121,6 +124,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Determines the start destination for the navigation graph.
+     * @param fileContent The content of the file if the activity was started with ACTION_VIEW intent.
+     * @return The route of the start destination screen.
+     */
     private fun determineStartDestination(fileContent: String?): String {
         // Navigate to AddScreen if file content is available
         return when {
