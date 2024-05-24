@@ -148,7 +148,7 @@ def get_tasks(request):
 
     return Response({'error': serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
-@api_view(['DELETE'])
+@api_view(['POST'])
 def delete_task(request):
     user = request.user
     serializer = TaskSerializer(data=request.data)
