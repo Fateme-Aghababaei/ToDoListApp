@@ -94,7 +94,6 @@ class MainActivity : ComponentActivity() {
                             },
                             onLogout = {
                                 sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
-                                val tokenCleared = sharedPref.getString(SHARED_PREFS_TOKEN, "").isNullOrEmpty()
                                 userViewModel.setTokenEmpty()
                                 navController.navigate(Screens.ScreenLogin.route)
                             }
