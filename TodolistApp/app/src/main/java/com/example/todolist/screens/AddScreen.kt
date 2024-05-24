@@ -38,16 +38,7 @@ import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import java.util.*
-/**
- * A composable function representing the Add Task screen.
- *
- * @param modifier The modifier to be applied to the layout.
- * @param taskViewModel The view model to interact with task data.
- * @param token The authentication token.
- * @param onCancelClicked Callback when cancel button is clicked.
- * @param onAddTaskClicked Callback when add task button is clicked.
- * @param initialTitle The initial title for the task.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(
