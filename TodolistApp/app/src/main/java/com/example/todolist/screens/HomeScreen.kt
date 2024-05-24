@@ -73,17 +73,7 @@ import com.example.todolist.R
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
-/**
- * A composable function representing the home screen.
- *
- * @param modifier The modifier to be applied to the layout.
- * @param taskViewModel The view model to interact with task data.
- * @param userViewModel The view model to interact with user data.
- * @param token The authentication token.
- * @param onAddTaskClicked Callback when the add task button is clicked.
- * @param refreshOnClick Callback to refresh the UI on click.
- * @param onLogout Callback when the user logs out.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(

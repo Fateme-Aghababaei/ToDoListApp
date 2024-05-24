@@ -53,14 +53,7 @@ import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 import kotlinx.coroutines.delay
 
-/**
- * A composable function representing the login screen.
- *
- * @param modifier The modifier to be applied to the layout.
- * @param viewModel The view model to interact with user data.
- * @param onLoginClicked Callback when the login button is clicked.
- * @param onNavToSignupClicked Callback to navigate to the sign-up screen.
- */
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,

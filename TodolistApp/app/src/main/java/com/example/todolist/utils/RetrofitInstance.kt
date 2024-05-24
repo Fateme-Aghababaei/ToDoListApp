@@ -5,9 +5,7 @@ import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
-/**
- * Singleton object to provide Retrofit instance for making API calls.
- */
+
 object RetrofitInstance {
     val api: APIInterface by lazy {
         val httpClient = OkHttpClient.Builder()
