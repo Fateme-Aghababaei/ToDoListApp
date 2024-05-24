@@ -17,7 +17,10 @@ import com.example.todolist.screens.*
 import com.example.todolist.ui.theme.ToDoListTheme
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
-
+/**
+ * MainActivity for the ToDoList application.
+ * This activity serves as the entry point for the application and handles navigation between different screens.
+ */
 class MainActivity : ComponentActivity() {
 
     // Shared preferences
@@ -28,7 +31,9 @@ class MainActivity : ComponentActivity() {
             Context.MODE_PRIVATE
         )
     }
-
+/**
+     * onCreate function is called when the activity is starting.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //sharedPref.edit().putString(SHARED_PREFS_TOKEN, "").apply()
@@ -120,6 +125,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+     /**
+     * Determines the start destination based on the presence of file content and login status.
+     */
 
     private fun determineStartDestination(fileContent: String?): String {
         // Navigate to AddScreen if file content is available

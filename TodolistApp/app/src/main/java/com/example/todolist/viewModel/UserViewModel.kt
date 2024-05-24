@@ -22,7 +22,11 @@ class UserViewModel : ViewModel() {
 
     private val _loggedInUser = MutableStateFlow<User?>(null)
     val loggedInUser: StateFlow<User?> = _loggedInUser
-
+ /**
+     * Initiates a login request with the provided email and password.
+     * @param email The user's email.
+     * @param password The user's password.
+     */
     fun login(email: String, password: String) {
         viewModelScope.launch {
             val pair = repository.login(email, password)
@@ -30,7 +34,11 @@ class UserViewModel : ViewModel() {
             _username.value = pair.second
         }
     }
-
+/**
+     * Initiates a signup request with the provided email and password.
+     * @param email The user's email.
+     * @param password The user's password.
+     */
     fun signup(email: String, password: String) {
         viewModelScope.launch {
             val pair = repository.signup(email, password)
@@ -42,7 +50,10 @@ class UserViewModel : ViewModel() {
     fun setTokenEmpty() {
         _token.value = ""
     }
-
+ /**
+     * Initiates a logout request with the provided token.
+     * @param token The user's authentication token.
+     */
     fun logout(token: String) {
         viewModelScope.launch {
             val success = repository.logout(token)
@@ -56,7 +67,10 @@ class UserViewModel : ViewModel() {
     fun resetLogoutSuccess() {
         _logoutSuccess.value = false
     }
-
+/**
+     * Retrieves the user information associated with the provided token.
+     * @param token The user's authentication token.
+     */
     fun getUser(token: String) {
         viewModelScope.launch {
             val user = repository.getUser(token)
