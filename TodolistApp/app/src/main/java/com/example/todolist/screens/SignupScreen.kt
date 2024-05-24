@@ -55,6 +55,14 @@ import androidx.navigation.NavController
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 
+/**
+ * A composable function representing the signup screen.
+ *
+ * @param modifier The modifier to be applied to the layout.
+ * @param viewModel The view model to interact with user data.
+ * @param onSignupClicked Callback when the signup button is clicked.
+ * @param onNavToLoginClicked Callback to navigate to the login screen.
+ */
 @Composable
 fun SignupScreen(
     modifier: Modifier = Modifier,
