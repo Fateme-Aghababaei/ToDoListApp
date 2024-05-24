@@ -53,14 +53,7 @@ import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 import kotlinx.coroutines.delay
 
-/**
- * Composable function for displaying the login screen.
- *
- * @param modifier Modifier to be applied to the layout.
- * @param viewModel ViewModel for managing user-related operations.
- * @param onLoginClicked Callback for when the login button is clicked.
- * @param onNavToSignupClicked Callback for navigating to the signup screen.
- */
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -68,11 +61,9 @@ fun LoginScreen(
     onLoginClicked: (String) -> Unit,
     onNavToSignupClicked: () -> Unit
 ) {
-    // State for email input
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
 
-    // State for password input
     var password by remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var isPasswordRequiredError by remember { mutableStateOf(false) }
@@ -81,10 +72,8 @@ fun LoginScreen(
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
 
-    // State for tracking login button click
     var loginBtnClicked by remember { mutableStateOf(false) }
 
-    // Collecting token from the view model
     val token = viewModel.token
     LaunchedEffect(key1 = token, key2 = loginBtnClicked) {
         token.collect {
@@ -99,7 +88,7 @@ fun LoginScreen(
         }
     }
 
-    // Creating the login screen layout
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         LazyColumn(
             modifier
@@ -108,7 +97,6 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Logo and title
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Image(
@@ -119,6 +107,7 @@ fun LoginScreen(
                             .size(160.dp)
                             .align(Alignment.CenterHorizontally)
                     )
+
                     Text(
                         text = "ورود به حساب کاربری",
                         style = MaterialTheme.typography.titleMedium,
@@ -128,10 +117,8 @@ fun LoginScreen(
                 }
             }
 
-            // Email and password input fields
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // Email input
                     OutlinedTextField(value = email,
                         onValueChange = {
                             email = it
@@ -166,7 +153,7 @@ fun LoginScreen(
                             }
                         }))
 
-                    // Password input
+
                     OutlinedTextField(
                         value = password,
                         onValueChange = {
@@ -212,7 +199,6 @@ fun LoginScreen(
                 }
             }
 
-            // Login button and signup navigation button
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Button(
@@ -239,22 +225,22 @@ fun LoginScreen(
                             text = "ورود", style = MaterialTheme.typography.titleMedium
                         )
                     }
-
-                    // Button to navigate to the signup screen
-                    TextButton(onClick = {
-                        onNavToSignupClicked()
-                    }) {
-                        Text(
-                            text = "حساب کاربری ندارید؟ ثبت‌نام",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
                 }
+
+                // button to navigate to the signup screen
+                TextButton(onClick = {
+                    onNavToSignupClicked()
+                }) {
+                    Text(
+                        text = "حساب کاربری ندارید؟ ثبت‌نام",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
             }
         }
-
-        // Show snack bar if needed
+        // Show snack bar
         if (snackBarVisible) {
             Snackbar(modifier = Modifier.padding(16.dp), action = {
                 TextButton(onClick = { snackBarVisible = false }) {

@@ -73,17 +73,7 @@ import com.example.todolist.R
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
-/**
- * Composable function for displaying the home screen.
- *
- * @param modifier Modifier to be applied to the layout.
- * @param taskViewModel ViewModel for managing tasks.
- * @param userViewModel ViewModel for managing user-related operations.
- * @param token Authentication token.
- * @param onAddTaskClicked Callback for when the "Add Task" button is clicked.
- * @param refreshOnClick Callback for refreshing the UI.
- * @param onLogout Callback for logging out the user.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -96,17 +86,14 @@ fun HomeScreen(
     onLogout: () -> Unit
 ) {
 
-    // Collecting state from the taskViewModel and userViewModel
     val allTasks by taskViewModel.allTasks.collectAsState()
     val logoutSuccess by userViewModel.logoutSuccess.collectAsState()
     val user by userViewModel.loggedInUser.collectAsState()
 
-    // Fetching all tasks when the screen is launched
     LaunchedEffect(key1 = allTasks) {
         taskViewModel.getAllTasks(token)
     }
 
-    // Logging out user when logout success state changes
     LaunchedEffect(key1 = logoutSuccess) {
         if (logoutSuccess) {
             onLogout()
@@ -114,16 +101,13 @@ fun HomeScreen(
         }
     }
 
-    // Fetching user information when user state changes
     LaunchedEffect(key1 = user) {
         Log.v("fatt", "home user: $user")
         userViewModel.getUser(token)
     }
 
-    // Providing layout direction for the screen
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Scaffold(topBar = {
-            // Creating a top app bar with profile dropdown menu
             TopAppBar(
                 title = {
                     Text(text = "کارات", style = MaterialTheme.typography.titleLarge)
@@ -134,7 +118,6 @@ fun HomeScreen(
                     actionIconContentColor = Color.Black
                 ),
                 actions = {
-                    // Profile dropdown menu
                     var menuExpanded by remember { mutableStateOf(false) }
                     IconButton(onClick = { menuExpanded = true }) {
                         Icon(
@@ -149,7 +132,6 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier.padding(16.dp)
                         ) {
-                            // Displaying user profile information
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center
@@ -171,7 +153,6 @@ fun HomeScreen(
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
-                            // Logout button
                             OutlinedButton(
                                 onClick = {
                                     Log.v("fatt", "Logout button clicked")
@@ -192,7 +173,6 @@ fun HomeScreen(
                 },
             )
         }, floatingActionButton = {
-            // Floating action button for adding tasks
             FloatingActionButton(
                 onClick = {
                     onAddTaskClicked()
@@ -201,17 +181,14 @@ fun HomeScreen(
                 Icon(Icons.Default.Add, contentDescription = "Add", modifier = modifier.size(32.dp))
             }
         }) {
-            // Displaying list of tasks using LazyColumn
             LazyColumn(
                 modifier = modifier.padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 items(items = allTasks) { task ->
-                    // Displaying each task item
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token, refreshOnClick)
                 }
                 item {
-                    // Adding space at the end of the list
                     Spacer(modifier = Modifier.height(64.dp))
                 }
             }
@@ -219,15 +196,6 @@ fun HomeScreen(
     }
 }
 
-/**
- * Composable function for displaying a single task item.
- *
- * @param modifier Modifier to be applied to the layout.
- * @param task Task object to be displayed.
- * @param taskViewModel ViewModel for managing tasks.
- * @param token Authentication token.
- * @param refreshOnClick Callback for refreshing the UI.
- */
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TaskUI(
@@ -237,13 +205,11 @@ fun TaskUI(
     token: String,
     refreshOnClick: () -> Unit
 ) {
-    // State for checkbox state (checked or unchecked)
     var isChecked by remember {
         mutableStateOf(task.is_completed)
     }
     val context = LocalContext.current
 
-    // Card to display task details
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -280,24 +246,19 @@ fun TaskUI(
             Column(
                 modifier = modifier.widthIn(150.dp, 200.dp)
             ) {
-                // Displaying task title
                 Text(
                     text = task.title,
                     style = MaterialTheme.typography.titleMedium.copy(textDecoration = if (isChecked) TextDecoration.LineThrough else TextDecoration.None),
                     color = if (isChecked) Color.Gray else MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                // Displaying task description
                 Text(
                     text = task.description,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 3,
-                    overflow = Text
-Overflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis
                 )
-                // Displaying task due date
                 Text(text = "تاریخ: ${task.due_date}", style = MaterialTheme.typography.bodyMedium)
-                // Displaying task tags
                 LazyRow {
                     for (tag in task.tags) {
                         item {
@@ -316,9 +277,8 @@ Overflow.Ellipsis
                 }
             }
 
-            // Action buttons for task
+
             Row {
-                // Button to delete task
                 IconButton(onClick = {
                     taskViewModel.deleteTask(token, task.id)
                     refreshOnClick()
@@ -330,7 +290,6 @@ Overflow.Ellipsis
                     )
                 }
 
-                // Button to share task details
                 IconButton(onClick = {
                     val shareText = "عنوان تسک: ${task.title}"
                     val intent = Intent().apply {
@@ -348,7 +307,6 @@ Overflow.Ellipsis
                     )
                 }
 
-                // Checkbox for marking task as completed
                 Checkbox(checked = isChecked, onCheckedChange = {
                     isChecked = it
                     task.is_completed = it
