@@ -83,6 +83,9 @@ import com.example.todolist.viewModel.UserViewModel
  * @param onAddTaskClicked Callback when the add task button is clicked.
  * @param refreshOnClick Callback to refresh the UI on click.
  * @param onLogout Callback when the user logs out.
+ * @throws IllegalArgumentException If any of the required parameters are null or invalid.
+ * @see TaskViewModel
+ * @see UserViewModel
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -206,6 +209,19 @@ fun HomeScreen(
     }
 }
 
+
+/**
+ * A composable function that displays a task card with options to delete, share, and mark the task as completed.
+ *
+ * @param modifier The modifier to be applied to the TaskUI composable.
+ * @param task The task object containing details such as title, description, due date, priority, and tags.
+ * @param taskViewModel The ViewModel that handles task-related operations such as deleting and updating the task status.
+ * @param token The token to authenticate the request when performing task operations.
+ * @param refreshOnClick A lambda function to refresh the task list when the task is deleted.
+ * @throws IllegalArgumentException If the task or token is null.
+ * @see TaskViewModel#deleteTask(String, int)
+ * @see TaskViewModel#changeTaskStatus(String, int, boolean)
+ */
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TaskUI(

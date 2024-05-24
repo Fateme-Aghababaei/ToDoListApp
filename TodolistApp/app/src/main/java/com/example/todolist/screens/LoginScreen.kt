@@ -60,6 +60,13 @@ import kotlinx.coroutines.delay
  * @param viewModel The view model to interact with user data.
  * @param onLoginClicked Callback when the login button is clicked.
  * @param onNavToSignupClicked Callback to navigate to the sign-up screen.
+ *
+ * The login screen provides input fields for email and password, performs validation,
+ * and displays error messages using a snackbar if necessary. It uses Jetpack Compose
+ * for layout and material design components.
+ *
+ * @see UserViewModel
+ * @see SignUpScreen
  */
 @Composable
 fun LoginScreen(

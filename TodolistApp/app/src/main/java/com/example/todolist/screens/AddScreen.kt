@@ -47,6 +47,7 @@ import java.util.*
  * @param onCancelClicked Callback when cancel button is clicked.
  * @param onAddTaskClicked Callback when add task button is clicked.
  * @param initialTitle The initial title for the task.
+ * @see TaskViewModel
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -389,7 +390,13 @@ fun AddScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * A composable function that displays a FilterChip which, when clicked, shows a dialog to add a new tag.
+ *
+ * @param token The token to authenticate the request when adding a new tag.
+ * @param taskViewModel The ViewModel that handles the task-related operations, including adding a new tag.
+ * @see TaskViewModel#addTag(String, String)
+ */
 @Composable
 fun AddFilterChip(token: String, taskViewModel: TaskViewModel) {
     // State to manage the visibility of the dialog

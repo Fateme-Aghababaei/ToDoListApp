@@ -62,6 +62,13 @@ import com.example.todolist.viewModel.UserViewModel
  * @param viewModel The view model to interact with user data.
  * @param onSignupClicked Callback when the signup button is clicked.
  * @param onNavToLoginClicked Callback to navigate to the login screen.
+ *
+ * The signup screen provides input fields for email, password, and password confirmation,
+ * performs validation, and displays error messages using a snackbar if necessary. It uses
+ * Jetpack Compose for layout and material design components.
+ *
+ * @see UserViewModel
+ * @see LoginScreen
  */
 @Composable
 fun SignupScreen(
