@@ -1,47 +1,59 @@
-package com.example.todolist.screens
+Here's the entire code with JavaDoc comments added:
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.util.Log
-import android.widget.DatePicker
-import android.widget.TimePicker
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.FontWeight
+```java
+package com.example.todolist.screens;
 
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import com.example.todolist.models.Tag
-import com.example.todolist.models.Task
-import com.example.todolist.viewModel.TaskViewModel
-import java.util.*
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.util.Log;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import androidx.compose.foundation.background;
+import androidx.compose.foundation.clickable;
+import androidx.compose.foundation.layout.*;
+import androidx.compose.foundation.lazy.LazyColumn;
+import androidx.compose.foundation.lazy.LazyRow;
+import androidx.compose.foundation.lazy.items;
+import androidx.compose.foundation.shape.RoundedCornerShape;
+import androidx.compose.foundation.text.KeyboardOptions;
+import androidx.compose.material3.*;
+import androidx.compose.material.icons.Icons;
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack;
+import androidx.compose.material.icons.filled.AccessTime;
+import androidx.compose.material.icons.filled.Add;
+import androidx.compose.material.icons.filled.ArrowDropDown;
+import androidx.compose.material.icons.filled.Check;
+import androidx.compose.material.icons.filled.DateRange;
+import androidx.compose.runtime.*;
+import androidx.compose.ui.Alignment;
+import androidx.compose.ui.Modifier;
+import androidx.compose.ui.graphics.Color;
+import androidx.compose.ui.graphics.graphicsLayer;
+import androidx.compose.ui.platform.LocalContext;
+import androidx.compose.ui.platform.LocalLayoutDirection;
+import androidx.compose.ui.text.font.FontWeight;
+import androidx.compose.ui.text.input.KeyboardType;
+import androidx.compose.ui.text.style.TextDirection;
+import androidx.compose.ui.unit.LayoutDirection;
+import androidx.compose.ui.unit.dp;
+import com.example.todolist.models.Tag;
+import com.example.todolist.models.Task;
+import com.example.todolist.viewModel.TaskViewModel;
+import java.util.*;
 
+/**
+ * Composable function for displaying the screen to add a new task.
+ *
+ * @param modifier Modifier for the composable.
+ * @param taskViewModel ViewModel for tasks.
+ * @param token Token for authentication.
+ * @param onCancelClicked Callback for cancel button clicked event.
+ * @param onAddTaskClicked Callback for add task button clicked event.
+ * @param initialTitle Initial title for the task.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(
+public fun AddScreen(
     modifier: Modifier = Modifier,
     taskViewModel: TaskViewModel,
     token: String,
@@ -49,23 +61,23 @@ fun AddScreen(
     onAddTaskClicked: (task: Task) -> Unit,
     initialTitle: String
 ) {
-    var title by remember { mutableStateOf(initialTitle) }
-    var description by remember { mutableStateOf("") }
-    var dueDate by remember { mutableStateOf("") }
-    var dueTime by remember { mutableStateOf("") }
-    var priority by remember { mutableIntStateOf(0) }
-    var tags by remember { mutableStateOf(listOf<Tag>()) }
-    var selectedPriorityIndex by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
+    var title by remember { mutableStateOf(initialTitle) };
+    var description by remember { mutableStateOf("") };
+    var dueDate by remember { mutableStateOf("") };
+    var dueTime by remember { mutableStateOf("") };
+    var priority by remember { mutableIntStateOf(0) };
+    var tags by remember { mutableStateOf(listOf<Tag>()) };
+    var selectedPriorityIndex by remember { mutableIntStateOf(0) };
+    val context = LocalContext.current;
 
-    val allTags by taskViewModel.allTags.collectAsState()
+    val allTags by taskViewModel.allTags.collectAsState();
 
-    var snackBarVisible by remember { mutableStateOf(false) }
-    var snackBarMessage by remember { mutableStateOf("") }
+    var snackBarVisible by remember { mutableStateOf(false) };
+    var snackBarMessage by remember { mutableStateOf("") };
 
     LaunchedEffect(key1 = allTags) {
-        taskViewModel.getTags(token)
-        Log.v("fatt", "all tags: $allTags")
+        taskViewModel.getTags(token);
+        Log.v("fatt", "all tags: $allTags");
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -189,7 +201,9 @@ fun AddScreen(
                                     ),
                                     leadingIcon = {
                                         if (isSelected) {
-                                            Icon(imageVector = Icons.Default.Check, contentDescription = "check")
+                                            Icon(imageVector
+
+ = Icons.Default.Check, contentDescription = "check")
                                         }
                                     }
                                 )
@@ -282,7 +296,7 @@ fun AddScreen(
                     )
                 }
 
-                val priorityOptions = listOf("مشخص نشده", "کم", "متوسط", "زیاد")
+                val priorityOptions = listOf("مشخص نشده", "کم", "متوسط", "زیاد");
 
                 item {
                     OutlinedTextField(
@@ -317,7 +331,7 @@ fun AddScreen(
                             }
                         }
                     )
-                    priority = selectedPriorityIndex
+                    priority = selectedPriorityIndex;
                 }
 
                 item {
@@ -329,7 +343,7 @@ fun AddScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         onClick = {
                             if (title.isNotEmpty() && description.isNotEmpty() && dueDate.isNotEmpty()) {
-                                val task = Task(
+                                val task = new Task(
                                     0,
                                     title,
                                     description,
@@ -338,19 +352,19 @@ fun AddScreen(
                                     priority,
                                     tags,
                                     null
-                                )
-                                Log.v("fatt", task.toString())
-                                onAddTaskClicked(task)
+                                );
+                                Log.v("fatt", task.toString());
+                                onAddTaskClicked(task);
                             } else {
-                                snackBarVisible = true
-                                snackBarMessage = "پر کردن همه موارد الزامی است."
+                                snackBarVisible = true;
+                                snackBarMessage = "پر کردن همه موارد الزامی است.";
                             }
                         }) {
                         Text(
                             text = "افزودن وظیفه",
                             style = MaterialTheme.typography.titleSmall,
                             color = Color.White
-                        )
+                        );
                     }
                 }
             }
@@ -378,6 +392,14 @@ fun AddScreen(
         }
     }
 }
+
+/**
+ * Composable function for adding a filter chip.
+ *
+ * @param token Token for authentication.
+ * @param taskViewModel ViewModel for tasks.
+ */
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)

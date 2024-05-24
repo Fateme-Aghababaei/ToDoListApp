@@ -6,7 +6,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
+/**
+ * Singleton object for providing a Retrofit API instance.
+ */
 object RetrofitInstance {
+
+    /**
+     * Lazily initialized Retrofit API instance.
+     */
     val api: APIInterface by lazy {
         val httpClient = OkHttpClient.Builder()
             .connectTimeout(2, TimeUnit.MINUTES)

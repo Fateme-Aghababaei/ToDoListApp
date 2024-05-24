@@ -54,7 +54,14 @@ import androidx.core.util.PatternsCompat
 import androidx.navigation.NavController
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
-
+/**
+ * Composable function for displaying the signup screen.
+ *
+ * @param modifier Modifier to be applied to the layout.
+ * @param viewModel ViewModel for managing user-related operations.
+ * @param onSignupClicked Callback for when the signup button is clicked.
+ * @param onNavToLoginClicked Callback for navigating to the login screen.
+ */
 @Composable
 fun SignupScreen(
     modifier: Modifier = Modifier,
@@ -62,22 +69,28 @@ fun SignupScreen(
     onSignupClicked: (String) -> Unit,
     onNavToLoginClicked: () -> Unit
 ) {
+    // State for email input
     var email by remember { mutableStateOf("") }
     var isEmailRequiredError by remember { mutableStateOf(false) }
 
+    // State for password input
     var password by remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var isPasswordRequiredError by remember { mutableStateOf(false) }
 
+    // State for password repeat input
     var passwordRepeat by remember { mutableStateOf("") }
     var passwordRepeatVisible by rememberSaveable { mutableStateOf(false) }
     var isPasswordRepeatRequiredError by remember { mutableStateOf(false) }
 
+    // Snack bar state
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
 
+    // State for tracking signup button click
     var signupBtnClicked by remember { mutableStateOf(false) }
 
+    // Collecting token from the view model
     val token = viewModel.token
     LaunchedEffect(key1 = token, key2 = signupBtnClicked) {
         token.collect {
@@ -90,7 +103,7 @@ fun SignupScreen(
         }
     }
 
-
+    // Creating the signup screen layout
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         LazyColumn(
             modifier
@@ -99,6 +112,7 @@ fun SignupScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // Logo and title
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Image(
@@ -109,7 +123,6 @@ fun SignupScreen(
                             .size(160.dp)
                             .align(Alignment.CenterHorizontally)
                     )
-
                     Text(
                         text = "ایجاد حساب کاربری",
                         style = MaterialTheme.typography.titleMedium,
@@ -119,8 +132,10 @@ fun SignupScreen(
                 }
             }
 
+            // Email, password, and password repeat input fields
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
+                    // Email input
                     OutlinedTextField(
                         value = email,
                         onValueChange = {
@@ -158,7 +173,7 @@ fun SignupScreen(
                         )
                     )
 
-
+                    // Password input
                     OutlinedTextField(
                         value = password,
                         onValueChange = {
@@ -205,6 +220,7 @@ fun SignupScreen(
                         isError = isPasswordRequiredError,
                     )
 
+                    // Password repeat input
                     OutlinedTextField(
                         value = passwordRepeat,
                         onValueChange = {
@@ -229,6 +245,7 @@ fun SignupScreen(
                             else Icons.Filled.VisibilityOff
 
                             // Please provide localized description for accessibility services
+                           
                             val description =
                                 if (passwordRepeatVisible) "Hide password" else "Show password"
 
@@ -253,6 +270,7 @@ fun SignupScreen(
                 }
             }
 
+            // Signup button and login navigation button
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Button(
@@ -270,7 +288,6 @@ fun SignupScreen(
                                     snackBarVisible = true
                                     snackBarMessage = "رمز عبور و تکرار آن مطابقت ندارد."
                                 }
-
                             } else {
                                 snackBarVisible = true
                                 snackBarMessage = "پر کردن همه موارد الزامی است."
@@ -286,21 +303,22 @@ fun SignupScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
-                }
 
-                // button to navigate to the signup screen
-                TextButton(onClick = {
-                    onNavToLoginClicked()
-                }) {
-                    Text(text = "قبلا ثبت‌نام کردید؟ ورود",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    // Button to navigate to the login screen
+                    TextButton(onClick = {
+                        onNavToLoginClicked()
+                    }) {
+                        Text(
+                            text = "قبلا ثبت‌نام کردید؟ ورود",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
                 }
-
             }
         }
-        // Show snack bar
+
+        // Show snack bar if needed
         if (snackBarVisible) {
             Snackbar(
                 modifier = Modifier.padding(16.dp),
