@@ -24,3 +24,6 @@ This is a Todo List application built using Kotlin Jetpack Compose for the front
 - Add tasks, set due dates, and prioritize them.
 - Use filters and tags to organize your tasks efficiently.
 - Access the Django admin interface at `http://todolistback-ru4g.onrender.com/admin/` (after creating a superuser) to manage users, tasks, and tags.
+
+## Instalation
+- [Get the app .apk from here](https://github.com/Fateme-Aghababaei/ToDoListApp/raw/main/todolist.apk)
