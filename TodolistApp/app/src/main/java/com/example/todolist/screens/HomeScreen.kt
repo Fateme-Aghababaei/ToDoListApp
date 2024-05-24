@@ -1,16 +1,13 @@
 package com.example.todolist.screens
 
-import android.content.Intent
-import androidx.compose.ui.platform.LocalContext
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,15 +17,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.Share
@@ -56,11 +50,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +66,7 @@ import com.example.todolist.R
 import com.example.todolist.models.Task
 import com.example.todolist.viewModel.TaskViewModel
 import com.example.todolist.viewModel.UserViewModel
+
 /**
  * A composable function representing the home screen.
  *
@@ -98,7 +92,6 @@ fun HomeScreen(
     refreshOnClick: () -> Unit,
     onLogout: () -> Unit
 ) {
-
     val allTasks by taskViewModel.allTasks.collectAsState()
     val logoutSuccess by userViewModel.logoutSuccess.collectAsState()
     val user by userViewModel.loggedInUser.collectAsState()
@@ -115,7 +108,6 @@ fun HomeScreen(
     }
 
     LaunchedEffect(key1 = user) {
-        Log.v("fatt", "home user: $user")
         userViewModel.getUser(token)
     }
 
@@ -168,7 +160,6 @@ fun HomeScreen(
                             Spacer(modifier = Modifier.height(4.dp))
                             OutlinedButton(
                                 onClick = {
-                                    Log.v("fatt", "Logout button clicked")
                                     userViewModel.logout(token)
                                 },
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
@@ -218,7 +209,6 @@ fun HomeScreen(
  * @param taskViewModel The ViewModel that handles task-related operations such as deleting and updating the task status.
  * @param token The token to authenticate the request when performing task operations.
  * @param refreshOnClick A lambda function to refresh the task list when the task is deleted.
- * @throws IllegalArgumentException If the task or token is null.
  * @see TaskViewModel#deleteTask(String, int)
  * @see TaskViewModel#changeTaskStatus(String, int, boolean)
  */
@@ -337,7 +327,6 @@ fun TaskUI(
                     isChecked = it
                     task.is_completed = it
                     taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
-                    //taskViewModel.getAllTasks(token)
                 })
             }
         }

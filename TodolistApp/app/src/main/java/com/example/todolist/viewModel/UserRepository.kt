@@ -1,4 +1,3 @@
-
 package com.example.todolist.viewModel
 
 import com.example.todolist.models.User

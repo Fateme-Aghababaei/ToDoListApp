@@ -1,6 +1,5 @@
 package com.example.todolist.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.models.User
@@ -22,7 +21,8 @@ class UserViewModel : ViewModel() {
 
     private val _loggedInUser = MutableStateFlow<User?>(null)
     val loggedInUser: StateFlow<User?> = _loggedInUser
- /**
+
+    /**
      * Initiates a login request with the provided email and password.
      * @param email The user's email.
      * @param password The user's password.
@@ -34,7 +34,8 @@ class UserViewModel : ViewModel() {
             _username.value = pair.second
         }
     }
-/**
+
+    /**
      * Initiates a signup request with the provided email and password.
      * @param email The user's email.
      * @param password The user's password.
@@ -50,7 +51,8 @@ class UserViewModel : ViewModel() {
     fun setTokenEmpty() {
         _token.value = ""
     }
- /**
+
+    /**
      * Initiates a logout request with the provided token.
      * @param token The user's authentication token.
      */
@@ -64,10 +66,14 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Resets the logout success state to false.
+     */
     fun resetLogoutSuccess() {
         _logoutSuccess.value = false
     }
-/**
+
+    /**
      * Retrieves the user information associated with the provided token.
      * @param token The user's authentication token.
      */

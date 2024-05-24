@@ -1,6 +1,5 @@
 package com.example.todolist.viewModel
 
-import android.util.Log
 import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 import com.example.todolist.utils.RetrofitInstance
@@ -21,7 +20,8 @@ class TaskRepositoryImpl : TaskRepository {
             return emptyList()
         }
     }
- /**
+
+    /**
      * Changes the completion status of a task.
      * @param token The authentication token.
      * @param id The ID of the task.
@@ -32,7 +32,8 @@ class TaskRepositoryImpl : TaskRepository {
         val response = RetrofitInstance.api.changeTaskStatus("Token $token", id, is_completed)
         return response.isSuccessful
     }
-/**
+
+    /**
      * Adds a new task.
      * @param token The authentication token.
      * @param task The task to add.
@@ -42,7 +43,8 @@ class TaskRepositoryImpl : TaskRepository {
         val response = RetrofitInstance.api.addTask("Token $token", task)
         return response.isSuccessful
     }
-/**
+
+    /**
      * Deletes a task with the specified ID.
      * @param token The authentication token.
      * @param id The ID of the task to delete.
@@ -52,7 +54,8 @@ class TaskRepositoryImpl : TaskRepository {
         val response = RetrofitInstance.api.deleteTask("Token $token", id)
         return response.isSuccessful
     }
-/**
+
+    /**
      * Retrieves all tags associated with the provided token.
      * @param token The authentication token.
      * @return A list of tags.
@@ -67,7 +70,8 @@ class TaskRepositoryImpl : TaskRepository {
             return emptyList()
         }
     }
- /**
+
+    /**
      * Adds a new tag with the specified title.
      * @param token The authentication token.
      * @param title The title of the tag to add.

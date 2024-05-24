@@ -2,9 +2,10 @@ package com.example.todolist.utils
 
 import com.example.todolist.data.APIInterface
 import okhttp3.OkHttpClient
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
 /**
  * Singleton object to provide Retrofit instance for making API calls.
  */

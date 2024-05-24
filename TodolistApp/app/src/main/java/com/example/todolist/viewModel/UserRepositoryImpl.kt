@@ -1,11 +1,10 @@
 package com.example.todolist.viewModel
 
-import android.util.Log
 import com.example.todolist.models.User
 import com.example.todolist.utils.RetrofitInstance
 
 class UserRepositoryImpl : UserRepository {
-     /**
+    /**
      * Logs in the user with the provided email and password.
      * @param email The user's email.
      * @param password The user's password.
@@ -18,11 +17,11 @@ class UserRepositoryImpl : UserRepository {
             val pair = Pair(res?.get("token") ?: "", res?.get("username") ?: "")
             return pair
         } else {
-            Log.v("faat", response.headers().toString())
             return Pair("", "")
         }
     }
- /**
+
+    /**
      * Signs up the user with the provided email and password.
      * @param email The user's email.
      * @param password The user's password.
@@ -39,7 +38,8 @@ class UserRepositoryImpl : UserRepository {
             throw Exception(response.code().toString())
         }
     }
-  /**
+
+    /**
      * Logs out the user with the specified token.
      * @param token The user's authentication token.
      * @return A boolean indicating whether the logout operation was successful.
@@ -48,20 +48,18 @@ class UserRepositoryImpl : UserRepository {
         val response = RetrofitInstance.api.logout("Token $token")
         return response.isSuccessful
     }
-/**
+
+    /**
      * Retrieves the user information associated with the provided token.
      * @param token The user's authentication token.
      * @return The user object if found, or null if no user is associated with the token.
      */
     override suspend fun getUser(token: String): User? {
         val response = RetrofitInstance.api.getUser("Token $token")
-        if (response.isSuccessful){
+        if (response.isSuccessful) {
             val user = response.body()
-            Log.v("fatt", "user: $user")
             return user
-        }
-        else {
-            Log.v("fatt", "user: else")
+        } else {
             return null
         }
     }

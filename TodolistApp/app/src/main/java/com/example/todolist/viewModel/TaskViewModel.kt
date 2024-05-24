@@ -1,9 +1,7 @@
 package com.example.todolist.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todolist.models.Tag
 import com.example.todolist.models.Task
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +25,8 @@ class TaskViewModel : ViewModel() {
 
     private val _allTags = MutableStateFlow(listOf<Tag>())
     val allTags: StateFlow<List<Tag>> = _allTags
- /**
+
+    /**
      * Retrieves all tasks associated with the provided token and updates the [allTasks] state flow.
      * @param token The authentication token.
      */
@@ -40,7 +39,8 @@ class TaskViewModel : ViewModel() {
             )
         }
     }
-   /**
+
+    /**
      * Changes the completion status of a task with the specified ID and updates the [changeTaskStatus] state flow.
      * @param token The authentication token.
      * @param id The ID of the task.
@@ -52,7 +52,8 @@ class TaskViewModel : ViewModel() {
             _changeTaskStatus.value = success
         }
     }
-/**
+
+    /**
      * Adds a new task and updates the [addTaskStatus] state flow.
      * @param token The authentication token.
      * @param task The task to add.
@@ -63,7 +64,8 @@ class TaskViewModel : ViewModel() {
             _changeTaskStatus.value = success
         }
     }
- /**
+
+    /**
      * Deletes a task with the specified ID and updates the [deleteTaskStatus] state flow.
      * @param token The authentication token.
      * @param id The ID of the task to delete.
@@ -74,6 +76,7 @@ class TaskViewModel : ViewModel() {
             _deleteTaskStatus.value = success
         }
     }
+
     /**
      * Retrieves all tags associated with the provided token and updates the [allTags] state flow.
      * @param token The authentication token.
@@ -84,7 +87,8 @@ class TaskViewModel : ViewModel() {
             _allTags.value = tagsList
         }
     }
- /**
+
+    /**
      * Adds a new tag with the specified title, then refreshes the list of tags.
      * @param token The authentication token.
      * @param title The title of the tag to add.

@@ -1,9 +1,7 @@
 package com.example.todolist.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,16 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.util.PatternsCompat
-import androidx.navigation.NavController
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 
@@ -197,7 +192,6 @@ fun SignupScreen(
                                 Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff
 
-                            // Please provide localized description for accessibility services
                             val description =
                                 if (passwordVisible) "Hide password" else "Show password"
 
@@ -243,11 +237,12 @@ fun SignupScreen(
                                 Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff
 
-                            // Please provide localized description for accessibility services
                             val description =
                                 if (passwordRepeatVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = { passwordRepeatVisible = !passwordRepeatVisible }) {
+                            IconButton(onClick = {
+                                passwordRepeatVisible = !passwordRepeatVisible
+                            }) {
                                 Icon(imageVector = image, description)
                             }
                         },
@@ -280,8 +275,7 @@ fun SignupScreen(
                                 if (password == passwordRepeat) {
                                     viewModel.signup(email, password)
                                     signupBtnClicked = true
-                                }
-                                else {
+                                } else {
                                     snackBarVisible = true
                                     snackBarMessage = "رمز عبور و تکرار آن مطابقت ندارد."
                                 }
@@ -307,7 +301,8 @@ fun SignupScreen(
                 TextButton(onClick = {
                     onNavToLoginClicked()
                 }) {
-                    Text(text = "قبلا ثبت‌نام کردید؟ ورود",
+                    Text(
+                        text = "قبلا ثبت‌نام کردید؟ ورود",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )

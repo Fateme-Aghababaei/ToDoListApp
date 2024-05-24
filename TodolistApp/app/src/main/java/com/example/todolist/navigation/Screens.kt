@@ -1,4 +1,5 @@
 package com.example.todolist.navigation
+
 /**
  * Sealed class representing different screens in the application.
  *
@@ -12,10 +13,6 @@ sealed class Screens (val route: String) {
         fun createRoute(initialTitle: String) = "add?initialTitle=$initialTitle"
     }
     data object ScreenProfile: Screens("profile")
-
-
     data object AuthenticationRoute: Screens("auth")
     data object AppRoute: Screens("app")
 }
-
-

@@ -15,8 +15,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface APIInterface {
-//TODO - add requests
-
     /**
      * Sends a login request to the server.
      *
@@ -30,21 +28,22 @@ interface APIInterface {
         @Field("email") email: String,
         @Field("password") password: String,
     ): Response<Map<String, String>>
- /**
+
+    /**
      * Sends a signup request to the server.
      *
      * @param email The user's email address.
      * @param password The user's password.
      * @return A Response object containing a Map with signup response data.
      */
-
     @FormUrlEncoded
     @POST("users/signup/")
     suspend fun signup(
         @Field("email") email: String,
         @Field("password") password: String,
     ): Response<Map<String, String>>
-  /**
+
+    /**
      * Retrieves all tasks from the server.
      *
      * @param authToken The authentication token.
@@ -54,7 +53,8 @@ interface APIInterface {
     suspend fun getAllTasks(
         @Header("Authorization") authToken: String
     ): Response<List<Task>>
-/**
+
+    /**
      * Changes the status of a task on the server.
      *
      * @param authToken The authentication token.
@@ -70,7 +70,7 @@ interface APIInterface {
         @Field("is_completed") is_completed: Boolean
     ): Response<Map<String, Any>>
 
-/**
+    /**
      * Adds a new task to the server.
      *
      * @param authToken The authentication token.
@@ -82,7 +82,8 @@ interface APIInterface {
         @Header("Authorization") authToken: String,
         @Body task: Task
     ): Response<Map<String, String>>
- /**
+
+    /**
      * Deletes a task from the server.
      *
      * @param authToken The authentication token.
@@ -95,7 +96,8 @@ interface APIInterface {
         @Header("Authorization") authToken: String,
         @Field("id") id: Int
     ): Response<Map<String, String>>
-/**
+
+    /**
      * Retrieves all tags from the server.
      *
      * @param authToken The authentication token.
