@@ -69,7 +69,6 @@ class TaskViewModel : ViewModel() {
     fun addTag(token: String, title: String) {
         viewModelScope.launch {
             val success = repository.addTag(token, title)
-            Log.v("fatt", "success: $success")
             if (success) {
                 getTags(token)
             }

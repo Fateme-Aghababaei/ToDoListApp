@@ -1,5 +1,6 @@
 package com.example.todolist.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.util.PatternsCompat
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -70,12 +72,19 @@ fun LoginScreen(
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
 
+    var loginBtnClicked by remember { mutableStateOf(false) }
+
     val token = viewModel.token
-    LaunchedEffect(key1 = token) {
+    LaunchedEffect(key1 = token, key2 = loginBtnClicked) {
         token.collect {
             if (it != "") {
                 onLoginClicked(it)
+            } else if (loginBtnClicked) {
+                delay(5000)
+                snackBarVisible = true
+                snackBarMessage = "مشکلی رخ داد. لطفا دوباره تلاش کنید."
             }
+            loginBtnClicked = false
         }
     }
 
@@ -110,8 +119,7 @@ fun LoginScreen(
 
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    OutlinedTextField(
-                        value = email,
+                    OutlinedTextField(value = email,
                         onValueChange = {
                             email = it
                             isEmailRequiredError =
@@ -139,22 +147,18 @@ fun LoginScreen(
                         isError = (!PatternsCompat.EMAIL_ADDRESS.matcher(email)
                             .matches() && email != "") || isEmailRequiredError,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (email.isEmpty()) {
-                                    isEmailRequiredError = true
-                                }
+                        keyboardActions = KeyboardActions(onDone = {
+                            if (email.isEmpty()) {
+                                isEmailRequiredError = true
                             }
-                        )
-                    )
+                        }))
 
 
                     OutlinedTextField(
                         value = password,
                         onValueChange = {
                             password = it
-                            isPasswordRequiredError =
-                                false // Reset the required error when the user starts typing again
+                            isPasswordRequiredError = false
                         },
                         label = { Text("رمز عبور") },
                         singleLine = true,
@@ -169,8 +173,7 @@ fun LoginScreen(
                             Icon(imageVector = Icons.Outlined.Lock, contentDescription = "Password")
                         },
                         trailingIcon = {
-                            val image = if (passwordVisible)
-                                Icons.Filled.Visibility
+                            val image = if (passwordVisible) Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff
 
                             // Please provide localized description for accessibility services
@@ -181,13 +184,11 @@ fun LoginScreen(
                                 Icon(imageVector = image, description)
                             }
                         },
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (password.isEmpty()) {
-                                    isPasswordRequiredError = true
-                                }
+                        keyboardActions = KeyboardActions(onDone = {
+                            if (password.isEmpty()) {
+                                isPasswordRequiredError = true
                             }
-                        ),
+                        }),
                         supportingText = {
                             if (isPasswordRequiredError) {
                                 Text(text = "رمز عبور الزامی است.")
@@ -206,8 +207,9 @@ fun LoginScreen(
                             .padding(32.dp, 4.dp)
                             .height(48.dp),
                         onClick = {
-                            if (email != "" || password != "") {
+                            if (email != "" && password != "") {
                                 viewModel.login(email, password)
+                                loginBtnClicked = true
                             } else {
                                 snackBarVisible = true
                                 snackBarMessage = "پر کردن همه موارد الزامی است."
@@ -220,8 +222,7 @@ fun LoginScreen(
                         )
                     ) {
                         Text(
-                            text = "ورود",
-                            style = MaterialTheme.typography.titleMedium
+                            text = "ورود", style = MaterialTheme.typography.titleMedium
                         )
                     }
                 }
@@ -230,7 +231,8 @@ fun LoginScreen(
                 TextButton(onClick = {
                     onNavToSignupClicked()
                 }) {
-                    Text(text = "حساب کاربری ندارید؟ ثبت‌نام",
+                    Text(
+                        text = "حساب کاربری ندارید؟ ثبت‌نام",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -240,14 +242,11 @@ fun LoginScreen(
         }
         // Show snack bar
         if (snackBarVisible) {
-            Snackbar(
-                modifier = Modifier.padding(16.dp),
-                action = {
-                    TextButton(onClick = { snackBarVisible = false }) {
-                        Text(text = "بستن")
-                    }
+            Snackbar(modifier = Modifier.padding(16.dp), action = {
+                TextButton(onClick = { snackBarVisible = false }) {
+                    Text(text = "بستن")
                 }
-            ) {
+            }) {
                 Text(text = snackBarMessage)
             }
         }
