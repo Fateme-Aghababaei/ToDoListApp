@@ -53,7 +53,21 @@ import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
 import kotlinx.coroutines.delay
 
-
+/**
+ * A composable function representing the login screen.
+ *
+ * @param modifier The modifier to be applied to the layout.
+ * @param viewModel The view model to interact with user data.
+ * @param onLoginClicked Callback when the login button is clicked.
+ * @param onNavToSignupClicked Callback to navigate to the sign-up screen.
+ *
+ * The login screen provides input fields for email and password, performs validation,
+ * and displays error messages using a snackbar if necessary. It uses Jetpack Compose
+ * for layout and material design components.
+ *
+ * @see UserViewModel
+ * @see SignUpScreen
+ */
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
