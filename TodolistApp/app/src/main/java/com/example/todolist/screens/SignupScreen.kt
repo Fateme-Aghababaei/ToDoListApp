@@ -76,11 +76,16 @@ fun SignupScreen(
     var snackBarVisible by remember { mutableStateOf(false) }
     var snackBarMessage by remember { mutableStateOf("") }
 
+    var signupBtnClicked by remember { mutableStateOf(false) }
+
     val token = viewModel.token
-    LaunchedEffect(key1 = token) {
+    LaunchedEffect(key1 = token, key2 = signupBtnClicked) {
         token.collect {
             if (it != "") {
                 onSignupClicked(it)
+            } else if (signupBtnClicked) {
+                snackBarVisible = true
+                snackBarMessage = "مشکلی رخ داد. لطفا دوباره تلاش کنید."
             }
         }
     }
@@ -256,8 +261,16 @@ fun SignupScreen(
                             .padding(32.dp, 4.dp)
                             .height(48.dp),
                         onClick = {
-                            if (email != "" || password != "" || passwordRepeat != "") {
-                                viewModel.signup(email, password)
+                            if (email != "" && password != "" && passwordRepeat != "") {
+                                if (password == passwordRepeat) {
+                                    viewModel.signup(email, password)
+                                    signupBtnClicked = true
+                                }
+                                else {
+                                    snackBarVisible = true
+                                    snackBarMessage = "رمز عبور و تکرار آن مطابقت ندارد."
+                                }
+
                             } else {
                                 snackBarVisible = true
                                 snackBarMessage = "پر کردن همه موارد الزامی است."

@@ -47,6 +47,9 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch {
             val success = repository.logout(token)
             _logoutSuccess.value = success
+            _token.value = ""
+            _username.value = ""
+            _loggedInUser.value = null
         }
     }
 
@@ -58,7 +61,6 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch {
             val user = repository.getUser(token)
             _loggedInUser.value = user
-            Log.v("fatt", "viewModel user: $user")
         }
     }
 }

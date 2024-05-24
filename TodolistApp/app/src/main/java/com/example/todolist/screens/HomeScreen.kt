@@ -311,6 +311,7 @@ fun TaskUI(
                     isChecked = it
                     task.is_completed = it
                     taskViewModel.changeTaskStatus(token, task.id, task.is_completed)
+                    //taskViewModel.getAllTasks(token)
                 })
             }
         }
