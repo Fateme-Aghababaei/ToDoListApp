@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.util.PatternsCompat
 import com.example.todolist.R
 import com.example.todolist.viewModel.UserViewModel
+import kotlinx.coroutines.delay
 
 /**
  * A composable function representing the signup screen.
@@ -94,9 +95,11 @@ fun SignupScreen(
             if (it != "") {
                 onSignupClicked(it)
             } else if (signupBtnClicked) {
+                delay(5000)
                 snackBarVisible = true
                 snackBarMessage = "مشکلی رخ داد. لطفا دوباره تلاش کنید."
             }
+            signupBtnClicked = false
         }
     }
 
