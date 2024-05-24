@@ -189,6 +189,9 @@ fun HomeScreen(
                 modifier = modifier.padding(it),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
+                item {
+                    Text(text = "همه کارها")
+                }
                 items(items = allTasks) { task ->
                     TaskUI(modifier = Modifier, task = task, taskViewModel, token, refreshOnClick)
                 }

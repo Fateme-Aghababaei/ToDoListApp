@@ -47,6 +47,19 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+        )
+        )
+    }
+    testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
     }
 }
 
@@ -96,7 +109,6 @@ dependencies {
     implementation ("androidx.compose.ui:ui-tooling:1.0.0")
 
     // Testing dependencies
-    testImplementation ("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.3.0")
@@ -104,14 +116,12 @@ dependencies {
     debugImplementation ("androidx.compose.ui:ui-test-manifest:1.3.0")
 
     // MockK
-    // testImplementation ("io.mockk:mockk:1.13.0")
+    testImplementation ("io.mockk:mockk:1.13.4")
+    androidTestImplementation("io.mockk:mockk-android:1.13.4")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test:runner:1.5.2")
-    testImplementation("org.mockito:mockito-core:5.2.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 
-    androidTestImplementation("androidx.room:room-testing:2.6.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    testImplementation("junit:junit:4.13.2")
+
 }
