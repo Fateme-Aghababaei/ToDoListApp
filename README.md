@@ -9,6 +9,7 @@ This is a Todo List application built using Kotlin Jetpack Compose for the front
   - Filter tasks based on tags
   - Set due dates and priorities for tasks
   - Responsive UI with Material Design principles
+  - Easily create tasks from .txt files
 
 - **Backend (Django):**
   - RESTful API endpoints for CRUD operations on tasks
